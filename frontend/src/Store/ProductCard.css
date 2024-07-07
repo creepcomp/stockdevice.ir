@@ -1,0 +1,11 @@
+.card {
+    border: none !important;
+}
+
+.card:hover .card-body {
+    display: none;
+}
+
+.card:hover .dropdown-menu {
+    display: block !important;
+}
