@@ -1,10 +1,10 @@
-import React from "react";
-import { Card, Ratio, Carousel, Table, Dropdown, Col } from "react-bootstrap";
-import "./ProductCard.css";
+import React from "react"
+import { Card, Ratio, Carousel, Table, Dropdown, Col } from "react-bootstrap"
+import "./ProductCard.css"
 
 const ProductCard = ({product, className}) => {
     return (
-        <Card className={"text-center shadow m-2 " + className}>
+        <Card className={"text-center " + className}>
             <a href={`/store/product/${product.id}/${product.slug}`}>
                 <Ratio aspectRatio="1x1">
                     {product.images ? (
@@ -20,7 +20,7 @@ const ProductCard = ({product, className}) => {
                     )}
                 </Ratio>
             </a>
-            <Card.Body className="bg-light bg-opacity-75 w-100 position-absolute bottom-0 p-1">
+            <Card.Body className="bg-light bg-opacity-75 rounded-bottom w-100 position-absolute bottom-0 p-1">
                 <h6 className="p-2" dir="auto">{product.name}</h6>
                 {product.price ? (
                     product.discount ? (
@@ -37,24 +37,8 @@ const ProductCard = ({product, className}) => {
                     "تماس بگیرید"
                 )}
             </Card.Body>
-            {/* <Dropdown.Menu className="position-absolute start-100 d-none" style={{ width: "500px" }} show>
-                <h5 className="text-center" dir="auto">
-                    {product.name}
-                </h5>
-                <Table striped>
-                    <tbody>
-                        {Object.keys(product.specification).map((x, i) => (
-                            <tr key={i}>
-                                <td dir="auto">{x}</td>
-                                <td dir="auto">{product.specification[x]}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-                <p className="text-justify m-1">{product.description}</p>
-            </Dropdown.Menu> */}
         </Card>
-    );
-};
+    )
+}
 
-export default ProductCard;
+export default ProductCard

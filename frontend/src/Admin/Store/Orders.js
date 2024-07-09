@@ -1,21 +1,21 @@
-import React from "react";
-import { Button, Modal, Table } from "react-bootstrap";
-import { useCookies } from "react-cookie";
+import React from "react"
+import { Button, Col, Modal, Row, Table } from "react-bootstrap"
+import { useCookies } from "react-cookie"
 
 const Orders = () => {
-    const [cookies] = useCookies();
+    const [cookies] = useCookies()
     const [show, setShow] = React.useState(false)
     const [orders, setOrders] = React.useState([])
     const [order, setOrder] = React.useState({user: {}, items: []})
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/store/orders/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setOrders(data);
-            else console.error(data);
-        });
-    };
+        fetch("/api/admin/orders/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setOrders(data)
+            else console.error(data)
+        })
+    }
 
     React.useEffect(update, [])
 
@@ -31,24 +31,34 @@ const Orders = () => {
     }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/store/orders/${id}/`, {
+            fetch(`/api/admin/orders/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
+
+    const edit = (id) => {
+        fetch(`/api/admin/orders/${id}/`).then(async (r) => {
+            const data = await r.json()
+            if (r.ok) {
+                setOrder(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const save = () => {
-        fetch(`/api/store/orders/${order.id}/`, {
+        fetch(`/api/admin/orders/${order.id}/`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",
@@ -57,13 +67,13 @@ const Orders = () => {
             },
             body: JSON.stringify(order),
         }).then(async (r) => {
-            const data = await r.json();
+            const data = await r.json()
             if (r.ok) {
-                update();
-                setShow(false);
-            } else setError(data);
-        });
-    };
+                update()
+                setShow(false)
+            } else setError(data)
+        })
+    }
 
     return (
         <>
@@ -84,14 +94,30 @@ const Orders = () => {
                             <td>{x.user.first_name} {x.user.last_name} ({x.user.username})</td>
                             <td>
                                 <Table>
+                                    <thead>
+                                        <tr>
+                                            <td>کالا</td>
+                                            <td>تعداد</td>
+                                            <td>مبلغ</td>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                        {x.items.map(y => {
-                                            <tr>
-                                                <td>{y.name}</td>
-                                                <td>{Number(y.price).toLocaleString("fa")} تومان</td>
+                                        {x.items.map((x, i) => (
+                                            <tr key={i}>
+                                                <td>
+                                                    <a href={"/store/product/" + x.product.id}>{x.product.name}</a>
+                                                </td>
+                                                <td>{x.quantity}</td>
+                                                <td>{Number(x.price).toLocaleString("fa")} تومان</td>
                                             </tr>
-                                        })}
+                                        ))}
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan={2}>جمع کل</td>
+                                            <td>{Number(x.price).toLocaleString("fa")} تومان</td>
+                                        </tr>
+                                    </tfoot>
                                 </Table>
                             </td>
                             <td>{getStatus(x.status)}</td>
@@ -110,30 +136,45 @@ const Orders = () => {
                     ))}
                 </tbody>
             </Table>
-            <Modal show={show} onHide={() => setShow(false)}>
+            <Modal show={show} onHide={() => setShow(false)} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {error.detail ? <Alert classID="m-1 p-2" variant="danger">{error.detail}</Alert>: null}
-                    <div>کاربر: {order.user.first_name} {order.user.last_name} ({order.user.username})</div>
+                    <Row>
+                    <Col>
+                        کاربر: <a href={"/admin/users?id=" + order.user.id}>{order.user.first_name} {order.user.last_name} ({order.user.username})</a>
+                    </Col>
+                    <Col>
+                        وضعیت: {getStatus(order.status)}
+                    </Col>
+                    </Row>
                     <Table>
                         <thead>
                             <tr>
                                 <td>کالا</td>
                                 <td>تعداد</td>
-                                <td>مبلغ (تومان)</td>
+                                <td>مبلغ</td>
                             </tr>
                         </thead>
                         <tbody>
-                            {order.items.map(x => (
-                                <tr>
-                                    <td><a href={"/store/product/" + x.id}>{x.name}</a></td>
+                            {order.items.map((x, i) => (
+                                <tr key={i}>
+                                    <td>
+                                        <a href={"/store/product/" + x.product.id}>{x.product.name}</a>
+                                    </td>
                                     <td>{x.quantity}</td>
-                                    <td>{x.price}</td>
+                                    <td>{Number(x.price).toLocaleString("fa")} تومان</td>
                                 </tr>
                             ))}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colSpan={2}>جمع کل</td>
+                                <td>{Number(order.price).toLocaleString("fa")} تومان</td>
+                            </tr>
+                        </tfoot>
                     </Table>
                 </Modal.Body>
                 <Modal.Footer>

@@ -1,31 +1,24 @@
-import React from "react";
-import {Alert, Col, Modal, Row, Tab, Tabs, Form, Button, Table, Image} from "react-bootstrap";
-import {useCookies} from "react-cookie";
-import {slugify} from "./Utils.js";
-import ProductLabel from "./ProductLabel";
+import React from "react"
+import {Alert, Col, Modal, Row, Tab, Tabs, Form, Button, Table, Image} from "react-bootstrap"
+import {useCookies} from "react-cookie"
+import {slugify} from "../Utils.js"
 
 const Products = () => {
-    const [cookies] = useCookies();
-    const [products, setProducts] = React.useState([]);
-    const [product, setProduct] = React.useState({});
-    const [show, setShow] = React.useState(false);
-    const [error, setError] = React.useState({});
-    const [categories, setCategories] = React.useState([]);
-    const [brands, setBrands] = React.useState([]);
+    const [cookies] = useCookies()
+    const [products, setProducts] = React.useState([])
+    const [product, setProduct] = React.useState({})
+    const [show, setShow] = React.useState(false)
+    const [error, setError] = React.useState({})
+    const [categories, setCategories] = React.useState([])
 
     React.useEffect(async () => {
-        await fetch("/api/store/categories/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setCategories(data);
-            else console.error(data);
-        });
-        await fetch("/api/store/brands/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBrands(data);
-            else console.error(data);
-        });
-        update();
-    }, []);
+        await fetch("/api/admin/categories/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setCategories(data)
+            else console.error(data)
+        })
+        update()
+    }, [])
 
     const init = () => {
         setProduct({
@@ -37,47 +30,47 @@ const Products = () => {
                 "صفحه نمایش": "",
             },
             keywords: "لپ تاپ, استوک, ارزان",
-        });
-    };
+        })
+    }
 
     const update = () => {
-        fetch("/api/store/products/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setProducts(data);
-            else console.error(data);
-        });
-    };
+        fetch("/api/admin/products/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setProducts(data)
+            else console.error(data)
+        })
+    }
 
     const edit = (id) => {
-        fetch(`/api/store/products/${id}/`).then(async (r) => {
-            const data = await r.json();
+        fetch(`/api/admin/products/${id}/`).then(async (r) => {
+            const data = await r.json()
             if (r.ok) {
-                setProduct({...data, category: data.category.id, brand: data.brand.id});
-                setShow(true);
-            } else console.error(data);
-        });
-    };
+                setProduct(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/store/products/${id}/`, {
+            fetch(`/api/admin/products/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
 
     const save = () => {
         if (product.id) {
-            fetch(`/api/store/products/${product.id}/`, {
+            fetch(`/api/admin/products/${product.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -86,14 +79,14 @@ const Products = () => {
                 },
                 body: JSON.stringify(product),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         } else {
-            fetch("/api/store/products/", {
+            fetch("/api/admin/products/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -102,37 +95,37 @@ const Products = () => {
                 },
                 body: JSON.stringify(product),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         }
-    };
+    }
 
     const upload = (e) => {
-        const formData = new FormData();
+        const formData = new FormData()
         Array.from(e.target.files).forEach((file, index) => {
-            formData.append(index, file);
-        });
-        fetch("/api/store/products/upload/", {
+            formData.append(index, file)
+        })
+        fetch("/api/admin/products/upload/", {
             method: "POST",
             headers: {"X-CSRFToken": cookies.csrftoken},
             body: formData,
         }).then(async (r) => {
-            const data = await r.json();
+            const data = await r.json()
             if (r.ok) {
-                if (product.images) product.images.push(...data.images);
-                else product.images = data.images;
-                setProduct({...product, images: product.images});
-            } else setError(data);
-        });
-    };
+                if (product.images) product.images.push(...data.images)
+                else product.images = data.images
+                setProduct({...product, images: product.images})
+            } else setError(data)
+        })
+    }
 
     const handleChange = (e) => {
-        setProduct({...product, [e.target.name]: e.target.value});
-    };
+        setProduct({...product, [e.target.name]: e.target.value})
+    }
 
     return (
         <>
@@ -152,10 +145,9 @@ const Products = () => {
                             <td>{x.name}</td>
                             <td>{Number(x.price).toLocaleString("fa")} تومان {x.discount ? <>({Number(x.discount).toLocaleString("fa")} تخفیف)</>: null}</td>
                             <td className="d-print-none">
-                                <Button className="m-1" href={`/store/product/${x.id}/${x.slug}`}>
+                                <Button className="m-1" href={"/store/product/" + x.id}>
                                     <i className="fa-solid fa-eye" />
                                 </Button>
-                                <ProductLabel product={x} />
                                 <Button className="m-1" onClick={() => edit(x.id)}>
                                     <i className="fa-solid fa-pen-to-square" />
                                 </Button>
@@ -196,14 +188,6 @@ const Products = () => {
                                     </Form.Select>
                                     <Form.Control.Feedback type="invalid">{error.category}</Form.Control.Feedback>
                                 </Col>
-                                <Col>
-                                    <Form.Label>برند:</Form.Label>
-                                    <Form.Select name="brand" value={product.brand} onChange={handleChange} isInvalid={error.brand}>
-                                        <option />
-                                        {brands.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
-                                    </Form.Select>
-                                    <Form.Control.Feedback type="invalid">{error.brand}</Form.Control.Feedback>
-                                </Col>
                             </Row>
                             <Row>
                                 <Col md>
@@ -230,10 +214,10 @@ const Products = () => {
                         <Tab title="عکس ها" eventKey="images">
                             {product.images ? product.images.map((x, i) => (
                                 <Image className='col-md-4 m-1' key={i} src={"/media/" + x} rounded fluid onClick={() => {
-                                    const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+                                    const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
                                     if (confirm) {
-                                        const images = product.images.filter((_, index) => index !== i);
-                                        setProduct({...product, images: images});
+                                        const images = product.images.filter((_, index) => index !== i)
+                                        setProduct({...product, images: images})
                                     }
                                 }} />
                             )): null}
@@ -249,10 +233,10 @@ const Products = () => {
                                             <Form.Control
                                                 value={x}
                                                 onChange={(e) => {
-                                                    const specification = {...product.specification};
-                                                    specification[e.target.value] = specification[x];
-                                                    delete specification[x];
-                                                    setProduct({...product, specification: specification});
+                                                    const specification = {...product.specification}
+                                                    specification[e.target.value] = specification[x]
+                                                    delete specification[x]
+                                                    setProduct({...product, specification: specification})
                                                 }}
                                                 isInvalid={error.specification}
                                             />
@@ -267,9 +251,9 @@ const Products = () => {
                                         </Col>
                                         <Col sm={1}>
                                             <Button className="w-100" variant="danger" onClick={() => {
-                                                const specification = {...product.specification};
-                                                delete specification[x];
-                                                setProduct({...product, specification: specification});
+                                                const specification = {...product.specification}
+                                                delete specification[x]
+                                                setProduct({...product, specification: specification})
                                             }}><i className="fa-solid fa-xmark" /></Button>
                                         </Col>
                                     </Row>
@@ -308,14 +292,14 @@ const Products = () => {
                 <Button
                     className="d-print-none m-1"
                     onClick={() => {
-                        init();
-                        setShow(true);
+                        init()
+                        setShow(true)
                     }}>
                     <i className="fa-solid fa-plus" />
                 </Button>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default Products;
+export default Products

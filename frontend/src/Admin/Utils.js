@@ -3,5 +3,5 @@ export const slugify = (str) => {
         .trim()
         .toLowerCase()
         .replace(/\s+/g, "-")
-        .replace(/[^a-z\u0621-\u06CC\u06F0-\u06F9\\-]+/g, "");
-};
+        .replace(/[^a-z0-9\u0621-\u06CC\u06F0-\u06F9\\-]+/g, "")
+}

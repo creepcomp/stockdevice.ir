@@ -1,10 +1,11 @@
-import React from "react";
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
-import { UserContext } from "./UserContext";
-import { useCookies } from "react-cookie";
+import React from "react"
+import { Alert, Button, Col, Form, Row } from "react-bootstrap"
+import { UserContext } from "./UserContext"
+import { useCookies } from "react-cookie"
+import { Helmet } from "react-helmet"
 
 const Profile = () => {
-    const [cookies] = useCookies();
+    const [cookies] = useCookies()
     const [user, setUser] = React.useState({})
     const [error, setError] = React.useState({})
     const [success, setSuccess] = React.useState({})
@@ -38,8 +39,11 @@ const Profile = () => {
     }
 
     return (
-        <div className="bg-light rounded m-2 p-2">
-            <h1 className="h2 text-center border-bottom p-2">اطلاعات حساب کاربری</h1>
+        <div className="bg-light rounded p-2">
+            <Helmet>
+                <title>اطلاعات کاربری</title>
+            </Helmet>
+            <h1 className="h2 text-center border-bottom p-2">حساب کاربری</h1>
             {success.detail ? <Alert className="m-1 p-2" variant="success">{success.detail}</Alert> : null}
             {error.detail ? <Alert className="m-1 p-2" variant="danger">{error.detail}</Alert> : null}
             <Row>

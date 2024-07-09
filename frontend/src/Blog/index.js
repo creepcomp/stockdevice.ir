@@ -1,7 +1,7 @@
-import React from "react";
-import {Route, Routes} from "react-router-dom";
-import BlogPage from "./BlogPage";
-import NotFound from "../NotFound";
+import React from "react"
+import {Route, Routes} from "react-router-dom"
+import BlogPage from "./BlogPage"
+import NotFound from "../NotFound"
 
 const Blog = () => {
     return (
@@ -9,7 +9,7 @@ const Blog = () => {
             <Route path=":id/:slug?" element={<BlogPage />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
-    );
-};
+    )
+}
 
-export default Blog;
+export default Blog

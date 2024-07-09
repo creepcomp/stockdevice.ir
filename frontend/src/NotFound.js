@@ -1,12 +1,13 @@
-import React from "react";
+import React from "react"
+import { Col } from "react-bootstrap"
 
 const NotFound = () => {
     return (
-        <div className="text-center">
+        <Col md={6} className="bg-light rounded shadow m-auto text-center p-2">
             <h1>صفحه مورد نظر یافت نشد.</h1>
             <a href="/">برگشت به خانه</a>
-        </div>
-    );
-};
+        </Col>
+    )
+}
 
-export default NotFound;
+export default NotFound

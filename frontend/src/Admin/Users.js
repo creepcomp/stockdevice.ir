@@ -1,54 +1,54 @@
-import React from "react";
-import {Modal, Form, Button, Table, Alert} from "react-bootstrap";
-import {useCookies} from "react-cookie";
+import React from "react"
+import {Modal, Form, Button, Table, Alert} from "react-bootstrap"
+import {useCookies} from "react-cookie"
 
 const Users = () => {
-    const [cookies] = useCookies();
-    const [show, setShow] = React.useState(false);
-    const [users, setUsers] = React.useState([]);
-    const [user, setUser] = React.useState({});
-    const [error, setError] = React.useState({});
+    const [cookies] = useCookies()
+    const [show, setShow] = React.useState(false)
+    const [users, setUsers] = React.useState([])
+    const [user, setUser] = React.useState({})
+    const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/account/users/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setUsers(data);
-            else console.error(data);
-        });
-    };
+        fetch("/api/admin/users/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setUsers(data)
+            else console.error(data)
+        })
+    }
 
-    React.useEffect(update, []);
+    React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/account/users/${id}/`).then(async (r) => {
-            const data = await r.json();
+        fetch(`/api/admin/users/${id}/`).then(async (r) => {
+            const data = await r.json()
             if (r.ok) {
-                setUser(data);
-                setShow(true);
-            } else console.error(data);
-        });
-    };
+                setUser(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/account/users/${id}/`, {
+            fetch(`/api/admin/users/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
 
     const save = () => {
         if (user.id) {
-            fetch(`/api/account/users/${user.id}/`, {
+            fetch(`/api/admin/users/${user.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -57,14 +57,14 @@ const Users = () => {
                 },
                 body: JSON.stringify(user),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         } else {
-            fetch("/api/account/users/", {
+            fetch("/api/admin/users/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -73,18 +73,18 @@ const Users = () => {
                 },
                 body: JSON.stringify(user),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         }
-    };
+    }
 
     const handleChange = (e) => {
-        setUser({...user, [e.target.name]: e.target.value});
-    };
+        setUser({...user, [e.target.name]: e.target.value})
+    }
 
     return (
         <>
@@ -171,14 +171,14 @@ const Users = () => {
                 <Button
                     className="m-1"
                     onClick={() => {
-                        setShow(true);
-                        setUser({});
+                        setShow(true)
+                        setUser({})
                     }}>
                     <i className="fa-solid fa-plus" />
                 </Button>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default Users;
+export default Users

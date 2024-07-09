@@ -1,53 +1,53 @@
-import React from "react";
-import {Modal, Form, Button, Table, Alert, Row, Col} from "react-bootstrap";
-import {useCookies} from "react-cookie";
+import React from "react"
+import {Modal, Form, Button, Table, Alert, Row, Col} from "react-bootstrap"
+import {useCookies} from "react-cookie"
 
 const Comments = () => {
-    const [cookies] = useCookies();
-    const [show, setShow] = React.useState(false);
-    const [comments, setComments] = React.useState([]);
-    const [comment, setComment] = React.useState({});
-    const [error, setError] = React.useState({});
+    const [cookies] = useCookies()
+    const [show, setShow] = React.useState(false)
+    const [comments, setComments] = React.useState([])
+    const [comment, setComment] = React.useState({})
+    const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/store/comments/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setComments(data);
-            else console.error(data);
-        });
-    };
+        fetch("/api/admin/comments/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setComments(data)
+            else console.error(data)
+        })
+    }
 
-    React.useEffect(update, []);
+    React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/store/comments/${id}/`).then(async (r) => {
-            const data = await r.json();
+        fetch(`/api/admin/comments/${id}/`).then(async (r) => {
+            const data = await r.json()
             if (r.ok) {
-                setComment(data);
-                setShow(true);
-            } else console.error(data);
-        });
-    };
+                setComment(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/store/comments/${id}/`, {
+            fetch(`/api/admin/comments/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
 
     const save = () => {
-        fetch(`/api/store/comments/${comment.id}/`, {
+        fetch(`/api/admin/comments/${comment.id}/`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",
@@ -56,17 +56,17 @@ const Comments = () => {
             },
             body: JSON.stringify(comment),
         }).then(async (r) => {
-            const data = await r.json();
+            const data = await r.json()
             if (r.ok) {
-                update();
-                setShow(false);
-            } else setError(data);
-        });
-    };
+                update()
+                setShow(false)
+            } else setError(data)
+        })
+    }
 
     const handleChange = (e) => {
-        setComment({...comment, [e.target.name]: e.target.value});
-    };
+        setComment({...comment, [e.target.name]: e.target.value})
+    }
 
     return (
         <>
@@ -131,7 +131,7 @@ const Comments = () => {
                 </Modal.Footer>
             </Modal>
         </>
-    );
-};
+    )
+}
 
-export default Comments;
+export default Comments

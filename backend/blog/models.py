@@ -24,3 +24,12 @@ class Blog(models.Model):
 
     class Meta:
         ordering = ["id"]
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, models.CASCADE, related_name="blog_comment_user")
+    blog = models.ForeignKey(Blog, models.CASCADE)
+    content = models.CharField(max_length=256)
+    reply = models.CharField(max_length=256, null=True)
+    score = models.PositiveSmallIntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)

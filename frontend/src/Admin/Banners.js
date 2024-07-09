@@ -1,54 +1,54 @@
-import React from "react";
-import {Modal, Form, Button, Table, Alert, Row, Col, Image} from "react-bootstrap";
-import {useCookies} from "react-cookie";
+import React from "react"
+import {Modal, Form, Button, Table, Alert, Row, Col, Image} from "react-bootstrap"
+import {useCookies} from "react-cookie"
 
 const Banners = () => {
-    const [cookies] = useCookies();
-    const [show, setShow] = React.useState(false);
-    const [banners, setBanners] = React.useState([]);
-    const [banner, setBanner] = React.useState({});
-    const [error, setError] = React.useState({});
+    const [cookies] = useCookies()
+    const [show, setShow] = React.useState(false)
+    const [banners, setBanners] = React.useState([])
+    const [banner, setBanner] = React.useState({})
+    const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/home/banners/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBanners(data);
-            else setError(data);
-        });
-    };
+        fetch("/api/admin/banners/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setBanners(data)
+            else setError(data)
+        })
+    }
 
-    React.useEffect(update, []);
+    React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/home/banners/${id}/`).then(async (r) => {
-            const data = await r.json();
+        fetch(`/api/admin/banners/${id}/`).then(async (r) => {
+            const data = await r.json()
             if (r.ok) {
-                setBanner(data);
-                setShow(true);
-            } else console.error(data);
-        });
-    };
+                setBanner(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/home/banners/${id}/`, {
+            fetch(`/api/admin/banners/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
 
     const save = () => {
         if (banner.id) {
-            fetch(`/api/home/banners/${banner.id}/`, {
+            fetch(`/api/admin/banners/${banner.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -57,14 +57,14 @@ const Banners = () => {
                 },
                 body: JSON.stringify(banner),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         } else {
-            fetch("/api/home/banners/", {
+            fetch("/api/admin/banners/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -73,32 +73,32 @@ const Banners = () => {
                 },
                 body: JSON.stringify(banner),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         }
-    };
+    }
 
     const upload = (e) => {
-        const formData = new FormData();
-        formData.append("image", e.target.files[0]);
-        fetch("/api/home/banners/upload/", {
+        const formData = new FormData()
+        formData.append("image", e.target.files[0])
+        fetch("/api/admin/banners/upload/", {
             method: "POST",
             headers: {"X-CSRFToken": cookies.csrftoken},
             body: formData,
         }).then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBanner({...banner, image: data.image});
-            else setError(data);
-        });
-    };
+            const data = await r.json()
+            if (r.ok) setBanner({...banner, image: data.image})
+            else setError(data)
+        })
+    }
 
     const handleChange = (e) => {
-        setBanner({...banner, [e.target.name]: e.target.value});
-    };
+        setBanner({...banner, [e.target.name]: e.target.value})
+    }
 
     return (
         <>
@@ -140,9 +140,9 @@ const Banners = () => {
                     <Form.Control.Feedback type="invalid">{error.image}</Form.Control.Feedback>
                     {banner.image ? (
                         <Image src={"/media/" + banner.image} fluid rounded onClick={() => {
-                            const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+                            const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
                             if (confirm) {
-                                setBanner({...banner, image: null});
+                                setBanner({...banner, image: null})
                             }
                         }} />
                     ): null}
@@ -151,6 +151,7 @@ const Banners = () => {
                     <Form.Control.Feedback type="invalid">{error.link}</Form.Control.Feedback>
                     <Form.Label>مکان:</Form.Label>
                     <Form.Select name="location" value={banner.location} onChange={handleChange} isInvalid={error.location}>
+                        <option />
                         <option value={0}>صفحه اصلی | 1x1</option>
                         <option value={1}>صفحه اصلی | 1x2</option>
                     </Form.Select>
@@ -164,14 +165,14 @@ const Banners = () => {
                 <Button
                     className="m-1"
                     onClick={() => {
-                        setShow(true);
-                        setBanner({});
+                        setShow(true)
+                        setBanner({})
                     }}>
                     <i className="fa-solid fa-plus" />
                 </Button>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default Banners;
+export default Banners

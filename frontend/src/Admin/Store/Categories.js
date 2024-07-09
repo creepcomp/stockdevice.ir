@@ -1,91 +1,91 @@
-import React from "react";
-import {Modal, Form, Button, Table, Alert, Row, Col} from "react-bootstrap";
-import {useCookies} from "react-cookie";
-import {slugify} from "./Utils.js";
+import React from "react"
+import {Modal, Form, Button, Table, Alert, Row, Col} from "react-bootstrap"
+import {useCookies} from "react-cookie"
+import {slugify} from "../Utils.js"
 
-const Brands = () => {
-    const [cookies] = useCookies();
-    const [show, setShow] = React.useState(false);
-    const [brands, setBrands] = React.useState([]);
-    const [brand, setBrand] = React.useState({});
-    const [error, setError] = React.useState({});
+const Categories = () => {
+    const [cookies] = useCookies()
+    const [show, setShow] = React.useState(false)
+    const [categories, setCategories] = React.useState([])
+    const [category, setCategory] = React.useState({})
+    const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/store/brands/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBrands(data);
-            else console.error(data);
-        });
-    };
+        fetch("/api/admin/categories/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setCategories(data)
+            else setError(data)
+        })
+    }
 
-    React.useEffect(update, []);
+    React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/store/brands/${id}/`).then(async (r) => {
-            const data = await r.json();
+        fetch(`/api/admin/categories/${id}/`).then(async (r) => {
+            const data = await r.json()
             if (r.ok) {
-                setBrand(data);
-                setShow(true);
-            } else console.error(data);
-        });
-    };
+                setCategory(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/store/brands/${id}/`, {
+            fetch(`/api/admin/categories/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
 
     const save = () => {
-        if (brand.id) {
-            fetch(`/api/store/brands/${brand.id}/`, {
+        if (category.id) {
+            fetch(`/api/admin/categories/${category.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                     "X-CSRFToken": cookies.csrftoken,
                 },
-                body: JSON.stringify(brand),
+                body: JSON.stringify(category),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         } else {
-            fetch("/api/store/brands/", {
+            fetch("/api/admin/categories/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                     "X-CSRFToken": cookies.csrftoken,
                 },
-                body: JSON.stringify(brand),
+                body: JSON.stringify(category),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         }
-    };
+    }
 
     const handleChange = (e) => {
-        setBrand({...brand, [e.target.name]: e.target.value});
-    };
+        setCategory({...category, [e.target.name]: e.target.value})
+    }
 
     return (
         <>
@@ -94,16 +94,18 @@ const Brands = () => {
                     <tr>
                         <td>#</td>
                         <td>نام</td>
+                        <td>والد</td>
                         <td className="d-print-none">عملیات</td>
                     </tr>
                 </thead>
                 <tbody>
-                    {brands.map((x, i) => (
+                    {categories.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.name}</td>
+                            <td>{x.parent ? x.parent.name : "اصلی"}</td>
                             <td className="d-print-none">
-                                <Button variant="secondary" className="m-1" href={`/store/brand/${x.id}/${x.slug}`}>
+                                <Button variant="secondary" className="m-1" href={"/store/?category=" + x.id}>
                                     <i className="fa-solid fa-eye" />
                                 </Button>
                                 <Button className="m-1" variant="secondary" onClick={() => edit(x.id)}>
@@ -126,22 +128,28 @@ const Brands = () => {
                     <Row>
                         <Col md>
                             <Form.Label>نام:</Form.Label>
-                            <Form.Control name="name" value={brand.name} onChange={(e) => setBrand({...brand, name: e.target.value, slug: slugify(e.target.value)})} isInvalid={error.name} dir="auto" />
+                            <Form.Control name="name" value={category.name} onChange={(e) => setCategory({...category, name: e.target.value, slug: slugify(e.target.value)})} isInvalid={error.name} dir="auto" />
                             <Form.Control.Feedback type="invalid">{error.name}</Form.Control.Feedback>
                         </Col>
                         <Col>
                             <Form.Label>اسلاگ:</Form.Label>
-                            <Form.Control name="slug" value={brand.slug} onChange={handleChange} isInvalid={error.slug} dir="auto" />
+                            <Form.Control name="slug" value={category.slug} onChange={handleChange} isInvalid={error.slug} dir="auto" />
                             <Form.Control.Feedback type="invalid">{error.slug}</Form.Control.Feedback>
                         </Col>
                     </Row>
                     <Form.Control.Feedback type="invalid">{error.name}</Form.Control.Feedback>
+                    <Form.Label>دسته بندی اصلی:</Form.Label>
+                    <Form.Select name="parent" value={category.parent} onChange={handleChange} isInvalid={error.parent}>
+                        <option />
+                        {categories.map(x => <option value={x.id}>{x.name}</option>)}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">{error.parent}</Form.Control.Feedback>
                     <Form.Label>کلید واژه ها:</Form.Label>
-                    <Form.Control name="keywords" value={brand.keywords} onChange={handleChange} isInvalid={error.keywords} />
+                    <Form.Control name="keywords" value={category.keywords} onChange={handleChange} isInvalid={error.keywords} />
                     <Form.Control.Feedback type="invalid">{error.keywords}</Form.Control.Feedback>
-                    <div className="d-flex flex-wrap justify-content-evenly align-items-center m-1">{brand.keywords ? brand.keywords.split(", ").map((x) => <span className="bg-primary rounded m-1 p-1 text-light" key={x.id}>{x}</span>) : null}</div>
+                    <div className="d-flex flex-wrap justify-content-evenly align-items-center m-1">{category.keywords ? category.keywords.split(", ").map((x) => <span className="bg-primary rounded m-1 p-1 text-light" key={x.id}>{x}</span>) : null}</div>
                     <Alert variant="danger" className="m-1 p-2">
-                        <Form.Check type="checkbox" name="show" checked={brand.show} label="نمایش داده شود." onChange={(e) => setBrand({...brand, show: e.target.checked})} isInvalid={error.show} />
+                        <Form.Check type="checkbox" name="show" checked={category.show} label="نمایش داده شود." onChange={(e) => setCategory({...category, show: e.target.checked})} isInvalid={error.show} />
                         <Form.Control.Feedback type="invalid">{error.show}</Form.Control.Feedback>
                     </Alert>
                 </Modal.Body>
@@ -153,14 +161,14 @@ const Brands = () => {
                 <Button
                     className="m-1"
                     onClick={() => {
-                        setShow(true);
-                        setBrand({});
+                        setShow(true)
+                        setCategory({})
                     }}>
                     <i className="fa-solid fa-plus" />
                 </Button>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default Brands;
+export default Categories

@@ -1,68 +1,66 @@
-import React from "react";
-import {Container, Form, Row, Col, Button} from "react-bootstrap";
-import ProductCard from "./ProductCard";
+import React from "react"
+import {Container, Form, Row, Col, Button} from "react-bootstrap"
+import ProductCard from "./ProductCard"
+import { Helmet } from "react-helmet"
 
-const StorePage = (props) => {
-    const [products, setProducts] = React.useState([]);
-    const [filter, setFilter] = React.useState({category: props.category, brand: props.brand});
-    const [categories, setCategories] = React.useState([]);
-    const [brands, setBrands] = React.useState([]);
+const StorePage = ({category = false}) => {
+    const [products, setProducts] = React.useState([])
+    const [filter, setFilter] = React.useState({})
+    const [categories, setCategories] = React.useState([])
 
     React.useEffect(() => {
         fetch("/api/store/categories/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setCategories(data);
-            else console.error(data);
-        });
-        fetch("/api/store/brands/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBrands(data);
-            else console.error(data);
-        });
-    }, []);
+            const data = await r.json()
+            if (r.ok) setCategories(data)
+            else console.error(data)
+        })
+        if (category.id) setFilter({category: category.id})
+        update()
+    }, [])
 
     const update = () => {
-        let url = "/api/store/products/";
-        const params = Object.keys(filter);
+        let url = "/api/store/products/"
+        const params = Object.keys(filter)
         if (params.length > 0) {
-            url += "?";
+            url += "?"
             params.forEach((x) => {
                 if (filter[x]) {
-                    url += `${x}=${filter[x]}&`;
+                    url += `${x}=${filter[x]}&`
                 }
-            });
-            url = url.slice(0, -1);
+            })
+            url = url.slice(0, -1)
         }
         fetch(url).then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setProducts(data);
-            else console.error(data);
-        });
-    };
-
-    React.useEffect(update, []);
+            const data = await r.json()
+            if (r.ok) setProducts(data)
+            else console.error(data)
+        })
+    }
 
     const handleChange = (e) => {
-        setFilter({...filter, [e.target.name]: e.target.value});
-    };
+        setFilter({...filter, [e.target.name]: e.target.value})
+    }
 
     return (
-        <Container className="my-2" fluid>
+        <Container className="p-2" fluid>
+            {category ? <Helmet>
+                <title>دسته بندی {category.name + ""} | استوک دیوایس</title>
+                {category.keywords ? <meta name="keywords" content={category.keywords} /> : null}
+                {category.description ? <meta name="description" content={category.description} /> : null}
+            </Helmet> : <Helmet>
+                <title>فروشگاه | استوک دیوایس</title>
+                <meta name="keywords" content="فروشگاه, استوک دیوایس" />
+                <meta name="description" content="فروشگاه لپ تاپ و کامپیوتر، انواع قطعات مادربرد، کیبورد، ال سی دی، رم، هارد و .." />
+            </Helmet>}
             <Row>
                 <Col lg={3}>
                     <div className="bg-light rounded mb-1 p-2">
+                        <h1 className="h4 text-center m-0 p-2 border-bottom">فروشگاه</h1>
                         <Form.Group className="mb-1">
                             <Form.Label>دسته بندی:</Form.Label>
                             <Form.Select name="category" value={filter.category} onChange={handleChange}>
                                 <option />
                                 {categories.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group className="mb-1">
-                            <Form.Label>برند:</Form.Label>
-                            <Form.Select name="brand" value={filter.brand} onChange={handleChange}>
-                                <option />
-                                {brands.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
                             </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-1">
@@ -83,14 +81,14 @@ const StorePage = (props) => {
                     <div className="bg-light rounded mb-1 p-2">
                         <div className="d-flex flex-wrap justify-content-center">
                             {products && products.length > 0 ? products.map((x, i) => (
-                                <ProductCard className="col-10 col-sm-8 col-md-6 col-lg-3 col-xl-2" key={i} product={x} />
+                                <ProductCard className="col-10 col-sm-8 col-md-6 col-lg-3" key={i} product={x} />
                             )): "کالایی جهت نمایش وجود ندارد."}
                         </div>
                     </div>
                 </Col>
             </Row>
         </Container>
-    );
-};
+    )
+}
 
-export default StorePage;
+export default StorePage

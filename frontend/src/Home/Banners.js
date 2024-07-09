@@ -1,16 +1,16 @@
-import React from "react";
-import { Carousel, Col, Image, Row } from "react-bootstrap";
+import React from "react"
+import { Carousel, Col, Image, Row } from "react-bootstrap"
 
 const Banners = () => {
-    const [banners, setBanners] = React.useState([]);
+    const [banners, setBanners] = React.useState([])
 
     React.useEffect(() => {
         fetch("/api/home/banners/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBanners(data);
-            else console.error(data);
-        });
-    }, []);
+            const data = await r.json()
+            if (r.ok) setBanners(data)
+            else console.error(data)
+        })
+    }, [])
 
     return (
         <Row>
@@ -44,4 +44,4 @@ const Banners = () => {
     )
 }
 
-export default Banners;
+export default Banners

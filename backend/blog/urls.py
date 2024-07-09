@@ -1,11 +1,12 @@
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
 from rest_framework.routers import DefaultRouter
-from .views import BlogViewSet
+from .views import BlogViewSet, CommentViewSet
 from .sitemaps import BlogSitemap
 
 router = DefaultRouter()
 router.register("blogs", BlogViewSet)
+router.register("comments", CommentViewSet)
 
 sitemaps = {
     "blog": BlogSitemap

@@ -13,7 +13,7 @@ const CategoryPage = () => {
         });
     }, []);
     return (
-        <StorePage category={category.id} />
+        <StorePage category={category} />
     );
 };
 

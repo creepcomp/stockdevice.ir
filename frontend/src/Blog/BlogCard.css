@@ -1,11 +1,11 @@
 .card {
-    border: none !important;
+    border: none !important
 }
 
 .card-body {
-    transition: all .25s;
+    transition: all .25s
 }
 
 .card:hover .card-body {
-    opacity: 0;
+    opacity: 0
 }

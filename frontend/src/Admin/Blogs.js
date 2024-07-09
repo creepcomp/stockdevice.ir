@@ -1,69 +1,69 @@
-import React from "react";
-import {Modal, Form, Button, Row, Col, Table, Alert, Image} from "react-bootstrap";
-import {useCookies} from "react-cookie";
-import {slugify} from "./Utils";
+import React from "react"
+import {Modal, Form, Button, Row, Col, Table, Alert, Image} from "react-bootstrap"
+import {useCookies} from "react-cookie"
+import {slugify} from "./Utils"
 
 const Blogs = () => {
-    const [cookies] = useCookies();
-    const [show, setShow] = React.useState(false);
-    const [blogs, setBlogs] = React.useState([]);
-    const [blog, setBlog] = React.useState({});
-    const [error, setError] = React.useState({});
+    const [cookies] = useCookies()
+    const [show, setShow] = React.useState(false)
+    const [blogs, setBlogs] = React.useState([])
+    const [blog, setBlog] = React.useState({})
+    const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/blog/blogs/").then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBlogs(data);
-            else console.error(data);
-        });
-    };
+        fetch("/api/admin/blogs/").then(async (r) => {
+            const data = await r.json()
+            if (r.ok) setBlogs(data)
+            else console.error(data)
+        })
+    }
 
-    React.useEffect(update, []);
+    React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/blog/blogs/${id}/`).then(async (r) => {
-            const data = await r.json();
+        fetch(`/api/admin/blogs/${id}/`).then(async (r) => {
+            const data = await r.json()
             if (r.ok) {
-                setBlog(data);
-                setShow(true);
-            } else console.error(data);
-        });
-    };
+                setBlog(data)
+                setShow(true)
+            } else console.error(data)
+        })
+    }
 
     const _delete = (id) => {
-        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)");
+        const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/blog/blogs/${id}/`, {
+            fetch(`/api/admin/blogs/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
                     "X-CSRFToken": cookies.csrftoken
                 },
             }).then(async (r) => {
-                const data = await r.json();
-                if (r.ok) update();
-                else console.error(data);
-            });
+                const data = await r.json()
+                if (r.ok) update()
+                else console.error(data)
+            })
         }
-    };
+    }
 
     const upload = (e) => {
-        const formData = new FormData();
-        formData.append("image", e.target.files[0]);
-        fetch("/api/blog/blogs/upload/", {
+        const formData = new FormData()
+        formData.append("image", e.target.files[0])
+        fetch("/api/admin/blogs/upload/", {
             method: "POST",
             headers: {"X-CSRFToken": cookies.csrftoken},
             body: formData,
         }).then(async (r) => {
-            const data = await r.json();
-            if (r.ok) setBlog({...blog, image: data.image});
-            else setError(data);
-        });
-    };
+            const data = await r.json()
+            if (r.ok) setBlog({...blog, image: data.image})
+            else setError(data)
+        })
+    }
 
     const save = () => {
         if (blog.id) {
-            fetch(`/api/blog/blogs/${blog.id}/`, {
+            fetch(`/api/admin/blogs/${blog.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -72,14 +72,14 @@ const Blogs = () => {
                 },
                 body: JSON.stringify(blog),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         } else {
-            fetch("/api/blog/blogs/", {
+            fetch("/api/admin/blogs/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -88,18 +88,18 @@ const Blogs = () => {
                 },
                 body: JSON.stringify(blog),
             }).then(async (r) => {
-                const data = await r.json();
+                const data = await r.json()
                 if (r.ok) {
-                    update();
-                    setShow(false);
-                } else setError(data);
-            });
+                    update()
+                    setShow(false)
+                } else setError(data)
+            })
         }
-    };
+    }
 
     const handleChange = (e) => {
-        setBlog({...blog, [e.target.name]: e.target.value});
-    };
+        setBlog({...blog, [e.target.name]: e.target.value})
+    }
 
     return (
         <>
@@ -108,6 +108,7 @@ const Blogs = () => {
                     <tr>
                         <td>#</td>
                         <td>عنوان</td>
+                        <td>نویسنده</td>
                         <td className="d-print-none">عملیات</td>
                     </tr>
                 </thead>
@@ -116,8 +117,9 @@ const Blogs = () => {
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.title}</td>
+                            <td>{x.author.first_name} {x.author.last_name}</td>
                             <td className="d-print-none">
-                                <Button variant="secondary" className="m-1" href={`/blog/${x.id}/${x.slug}`}>
+                                <Button variant="secondary" className="m-1" href={"/blog/" + x.id}>
                                     <i className="fa-solid fa-eye" />
                                 </Button>
                                 <Button className="m-1" variant="secondary" onClick={() => edit(x.id)}>
@@ -191,14 +193,14 @@ const Blogs = () => {
                 <Button
                     className="m-1"
                     onClick={() => {
-                        setShow(true);
-                        setBlog({});
+                        setShow(true)
+                        setBlog({})
                     }}>
                     <i className="fa-solid fa-plus" />
                 </Button>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default Blogs;
+export default Blogs
