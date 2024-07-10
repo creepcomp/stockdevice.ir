@@ -18,8 +18,8 @@ const Products = () => {
                 <div key={i} className="bg-light rounded mb-1">
                     <h5 className="text-center border-bottom m-0 p-2">{x.name}</h5>
                     <div className="d-flex overflow-auto">
-                        {x.products.map((y, i) => (
-                            <ProductCard className="col-10 col-sm-8 col-md-6 col-lg-3 m-1" key={i} product={y} />
+                        {x.products.map((x, i) => (
+                            <ProductCard className="col-10 col-sm-8 col-md-6 col-lg-3 m-1" key={i} product={x} />
                         ))}
                     </div>
                 </div>

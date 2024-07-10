@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, SlugField, CharField
+from rest_framework.serializers import ModelSerializer, CharField
 from account.serializers import UserSerializer
 from .models import Blog, Comment
 

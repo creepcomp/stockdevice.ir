@@ -2,10 +2,8 @@ import uuid, io
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from PIL import Image, ImageDraw, ImageFont
 from .models import Blog, Comment
 from .serializers import BlogSerializer, BlogListSerializer, CommentSerializer
-from .permissions import IsAdminUserOrReadOnly
 
 class BlogViewSet(ReadOnlyModelViewSet):
     queryset = Blog.objects.filter(show=True)

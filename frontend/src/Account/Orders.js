@@ -2,7 +2,6 @@ import React from "react"
 import { Alert, Button, Col, Modal, Row, Table } from "react-bootstrap"
 import { useCookies } from "react-cookie"
 import { Helmet } from "react-helmet"
-import { useParams } from "react-router-dom"
 import ReactToPrint from "react-to-print"
 
 const Orders = () => {
@@ -76,8 +75,8 @@ const Orders = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {orders.map(x => (
-                        <tr>
+                    {orders.map((x, i) => (
+                        <tr key={i}>
                             <td>{x.id}</td>
                             <td>
                                 <Table>
@@ -139,8 +138,8 @@ const Orders = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {order.items.map(x => (
-                                    <tr>
+                                {order.items.map((x, i) => (
+                                    <tr key={i}>
                                         <td>
                                             <a href={"/store/product/" + x.product.id}>{x.product.name}</a>
                                         </td>

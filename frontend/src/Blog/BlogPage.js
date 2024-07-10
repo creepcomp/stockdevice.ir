@@ -1,5 +1,5 @@
 import React from "react"
-import {Col, Container, Image, Ratio} from "react-bootstrap"
+import {Col, Image, Ratio} from "react-bootstrap"
 import {Helmet} from "react-helmet"
 import Markdown from "react-markdown"
 import {useParams} from "react-router-dom"

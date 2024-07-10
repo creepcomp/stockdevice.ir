@@ -141,7 +141,7 @@ const Categories = () => {
                     <Form.Label>دسته بندی اصلی:</Form.Label>
                     <Form.Select name="parent" value={category.parent} onChange={handleChange} isInvalid={error.parent}>
                         <option />
-                        {categories.map(x => <option value={x.id}>{x.name}</option>)}
+                        {categories.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">{error.parent}</Form.Control.Feedback>
                     <Form.Label>کلید واژه ها:</Form.Label>

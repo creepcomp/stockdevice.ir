@@ -1,5 +1,5 @@
 import React from "react"
-import { Card, Ratio, Carousel, Table, Dropdown, Col } from "react-bootstrap"
+import { Card, Ratio, Carousel } from "react-bootstrap"
 import "./ProductCard.css"
 
 const ProductCard = ({product, className}) => {

@@ -1,5 +1,5 @@
 import React from "react"
-import {Row, Col, Container, Image, Carousel, Ratio, Table} from "react-bootstrap"
+import {Row, Col, Container, Image, Carousel, Ratio, Table, Alert} from "react-bootstrap"
 import {useParams} from "react-router-dom"
 import {Helmet} from "react-helmet"
 import Markdown from "react-markdown"
@@ -27,6 +27,7 @@ const ProductPage = () => {
                 <meta name="description" content={product.description} />
             </Helmet>
             <div className="mb-2">
+                {error.detail ? <Alert variant="danger" className="m-1 p-2">{error.detail}</Alert> : null}
                 <Row>
                     <Col md>
                         <Ratio aspectRatio="1x1" className="bg-light rounded mb-1">

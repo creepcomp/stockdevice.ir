@@ -1,13 +1,12 @@
 import random, requests, re, os
 from django.contrib.auth import login, logout, authenticate
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework import status
+from datetime import datetime
 from .models import User
 from .serializers import UserSerializer, UserUpdateSerializer
-from datetime import datetime
 
 def send_sms(to, text):
     return requests.post("https://rest.payamak-panel.com/api/SendSMS/SendSMS", json={
@@ -18,7 +17,7 @@ def send_sms(to, text):
         "text": text
     })
 
-class AuthViewSet(ViewSet):
+class AccountViewSet(ViewSet):
     temp_codes = {}
 
     @action(["GET"], False)
@@ -39,9 +38,9 @@ class AuthViewSet(ViewSet):
                 login(request, user)
                 return Response({"detail": "ورود با موفقیت انجام شد."})
             else:
-                return Response({"detail": "نام کاربری (شماره همراه) یا رمز عبور اشتباه است."}, HTTP_400_BAD_REQUEST)
+                return Response({"detail": "نام کاربری (شماره همراه) یا رمز عبور اشتباه است."}, status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (نام کاربری، رمز عبور)"}, HTTP_400_BAD_REQUEST)
+            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (نام کاربری، رمز عبور)"}, status.HTTP_400_BAD_REQUEST)
     
     @action(["GET"], False)
     def logout(self, request):
@@ -66,15 +65,15 @@ class AuthViewSet(ViewSet):
                             login(request, user)
                             return Response({"detail": "ثبت نام با موفقیت انجام شد."})
                         else:
-                            return Response({"confirm_password": "تکرار رمزعبور با رمز عبور مغایرت دارد."}, HTTP_400_BAD_REQUEST)
+                            return Response({"confirm_password": "تکرار رمزعبور با رمز عبور مغایرت دارد."}, status.HTTP_400_BAD_REQUEST)
                     else:
-                       return Response({"password": "رمز عبور می بایست حداقل 8 کاراکتر و از حروف انگلیسی باشد."}, HTTP_400_BAD_REQUEST) 
+                       return Response({"password": "رمز عبور می بایست حداقل 8 کاراکتر و از حروف انگلیسی باشد."}, status.HTTP_400_BAD_REQUEST) 
                 else:
-                    return Response({"username": "این نام کاربری (شماره همراه) قبلاً استفاده شده است."}, HTTP_400_BAD_REQUEST)
+                    return Response({"username": "این نام کاربری (شماره همراه) قبلاً استفاده شده است."}, status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({"code": "کد وارد شده نامعتبر است."}, HTTP_400_BAD_REQUEST)
+                return Response({"code": "کد وارد شده نامعتبر است."}, status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (لطفا فیلد های مورد نیاز را بررسی کنید)"}, HTTP_400_BAD_REQUEST)
+            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (لطفا فیلد های مورد نیاز را بررسی کنید)"}, status.HTTP_400_BAD_REQUEST)
     
     @action(["POST"], False)
     def sendCode(self, request):
@@ -83,7 +82,7 @@ class AuthViewSet(ViewSet):
             if username in self.temp_codes:
                 time = (datetime.now() - self.temp_codes[username]["at"]).total_seconds()
                 if time < 5:
-                    return Response({"detail": f"لطفا {5 - time} ثانیه دیگر مجدد تلاش نمایید."}, HTTP_400_BAD_REQUEST)
+                    return Response({"detail": f"لطفا {5 - time} ثانیه دیگر مجدد تلاش نمایید."}, status.HTTP_400_BAD_REQUEST)
             code = random.randint(10000, 99999)
             response = send_sms(username, f"استوک دیوایس\nکد موقت شما: {code}\nلغو۱۱")
             if response.ok:
@@ -93,9 +92,9 @@ class AuthViewSet(ViewSet):
                 }
                 return Response({"detail": "کد به صورت پیامک به شماره شما ارسال شد."})
             else:
-                return Response({"detail": "خطایی در ارسال پیامک وجود دارد (لطفا با پشتیبانی تماس بگیرید)."}, HTTP_400_BAD_REQUEST)
+                return Response({"detail": "خطایی در ارسال پیامک وجود دارد (لطفا با پشتیبانی تماس بگیرید)."}, status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (نام کاربری (شماره همراه))"}, HTTP_400_BAD_REQUEST)
+            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (نام کاربری (شماره همراه))"}, status.HTTP_400_BAD_REQUEST)
     
     @action(["POST"], False)
     def changePassword(self, request):
@@ -114,14 +113,14 @@ class AuthViewSet(ViewSet):
                             user.save()
                             return Response({"detail": "رمز عبور با موفقیت تغییر کرد."})
                         else:
-                            return Response({"detail": "رمز عبور جدید می بایست حداقل 8 کاراکتر و از حروف انگلیسی باشد."}, HTTP_400_BAD_REQUEST)
+                            return Response({"detail": "رمز عبور جدید می بایست حداقل 8 کاراکتر و از حروف انگلیسی باشد."}, status.HTTP_400_BAD_REQUEST)
                     else:
-                        return Response({"detail": "رمز قدیمی نادرست می باشد."}, HTTP_400_BAD_REQUEST)
+                        return Response({"detail": "رمز قدیمی نادرست می باشد."}, status.HTTP_400_BAD_REQUEST)
                 else:
-                    return Response({"detail": "کد نامعتبر می باشد."}, HTTP_400_BAD_REQUEST)
-            return Response({"detail": "رمز جدید با تکرار خود مطابقت ندارد."}, HTTP_400_BAD_REQUEST)
+                    return Response({"detail": "کد نامعتبر می باشد."}, status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "رمز جدید با تکرار خود مطابقت ندارد."}, status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (نام کاربری، کد یکبار مصرف، رمز قدیمی، رمز جدید)"}, HTTP_400_BAD_REQUEST)
+            return Response({"detail": "عدم وجود پارامتر های مورد نیاز (نام کاربری، کد یکبار مصرف، رمز قدیمی، رمز جدید)"}, status.HTTP_400_BAD_REQUEST)
     
     @action(["POST"], False)
     def updateProfile(self, request):

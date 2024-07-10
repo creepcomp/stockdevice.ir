@@ -44,8 +44,8 @@ const Comments = ({product}) => {
             <Col md={6} className="bg-light rounded mx-md-auto mb-1 p-2">
                 <h4 className="border-bottom p-2 text-center">دیدگاه ها</h4>
                 {error.detail ? <Alert variant="danger" className="m-1 p-2">{error.detail}</Alert>: null}
-                {comments.length > 0 ? comments.map(x => (
-                    <div className="bg-primary bg-opacity-25 rounded mb-1 p-2">
+                {comments.length > 0 ? comments.map((x, i) => (
+                    <div key={i} className="bg-primary bg-opacity-25 rounded mb-1 p-2">
                         <div className="border-bottom p-2">
                             <b>{x.user.first_name}</b>
                             <small className="float-end" dir="ltr">{new Date(x.created_at).toLocaleString("fa")}</small>

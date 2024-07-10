@@ -1,6 +1,5 @@
 import React from "react"
 import BlogCard from "../Blog/BlogCard"
-import { Container } from "react-bootstrap"
 
 const Blogs = () => {
     const [blogs, setBlogs] = React.useState([])

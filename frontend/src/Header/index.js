@@ -1,7 +1,6 @@
 import React from "react"
 import {Button, Container, Image, Nav, Navbar, Offcanvas} from "react-bootstrap"
 import "./style.css"
-import logo from "./logo.png"
 import Cart from "./Cart"
 import { UserContext } from "../Account/UserContext"
 import Login from "../Account/Login"
@@ -14,7 +13,7 @@ const Header = () => {
         <Container className="bg-primary d-print-none" fluid>
             <Navbar variant="dark" expand="lg">
                 <Navbar.Brand href="/">
-                    <Image className="me-2" src={logo} rel="استوک دیوایس" width={25} fluid />
+                    <Image className="me-2" src="/logo.png" rel="استوک دیوایس" width={25} fluid />
                 </Navbar.Brand>
                 <Navbar.Offcanvas>
                     <Offcanvas.Header closeButton>
