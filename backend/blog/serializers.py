@@ -2,6 +2,8 @@ from rest_framework.serializers import ModelSerializer, CharField
 from account.serializers import UserSerializer
 from .models import Blog, Comment
 
+# User Serializers
+
 class BlogSerializer(ModelSerializer):
     author = UserSerializer(read_only=True)
     description = CharField(read_only=True)
@@ -24,3 +26,19 @@ class CommentSerializer(ModelSerializer):
         model = Comment
         fields = "__all__"
         read_only_fields = ["blog", "reply"]
+
+# Admin Serializers
+
+class BlogAdminSerializer(ModelSerializer):
+    author = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Blog
+        fields = "__all__"
+
+class CommentAdminSerializer(ModelSerializer):
+    user = UserSerializer(read_only=True)
+    blog = BlogAdminSerializer(read_only=True)
+    class Meta:
+        model = Comment
+        fields = "__all__"

@@ -11,7 +11,7 @@ const Categories = () => {
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/admin/categories/").then(async (r) => {
+        fetch("/api/store/admin/categories/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setCategories(data)
             else setError(data)
@@ -21,10 +21,12 @@ const Categories = () => {
     React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/admin/categories/${id}/`).then(async (r) => {
+        fetch(`/api/store/admin/categories/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
-                setCategory(data)
+                if (data.parent)
+                    setCategory({...data, parent: data.parent.id})
+                else setCategory(data)
                 setShow(true)
             } else console.error(data)
         })
@@ -33,7 +35,7 @@ const Categories = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/admin/categories/${id}/`, {
+            fetch(`/api/store/admin/categories/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -49,7 +51,7 @@ const Categories = () => {
 
     const save = () => {
         if (category.id) {
-            fetch(`/api/admin/categories/${category.id}/`, {
+            fetch(`/api/store/admin/categories/${category.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -65,7 +67,7 @@ const Categories = () => {
                 } else setError(data)
             })
         } else {
-            fetch("/api/admin/categories/", {
+            fetch("/api/store/admin/categories/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -140,7 +142,7 @@ const Categories = () => {
                     <Form.Control.Feedback type="invalid">{error.name}</Form.Control.Feedback>
                     <Form.Label>دسته بندی اصلی:</Form.Label>
                     <Form.Select name="parent" value={category.parent} onChange={handleChange} isInvalid={error.parent}>
-                        <option />
+                        <option>اصلی</option>
                         {categories.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">{error.parent}</Form.Control.Feedback>
@@ -151,6 +153,10 @@ const Categories = () => {
                     <Alert variant="danger" className="m-1 p-2">
                         <Form.Check type="checkbox" name="show" checked={category.show} label="نمایش داده شود." onChange={(e) => setCategory({...category, show: e.target.checked})} isInvalid={error.show} />
                         <Form.Control.Feedback type="invalid">{error.show}</Form.Control.Feedback>
+                    </Alert>
+                    <Alert className="m-1 p-2">
+                        <Form.Check type="checkbox" name="home" checked={category.home} label="نمایش در صفحه اصلی." onChange={(e) => setCategory({...category, home: e.target.checked})} isInvalid={error.home} />
+                        <Form.Control.Feedback type="invalid">{error.home}</Form.Control.Feedback>
                     </Alert>
                 </Modal.Body>
                 <Modal.Footer>

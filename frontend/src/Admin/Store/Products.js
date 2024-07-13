@@ -12,7 +12,7 @@ const Products = () => {
     const [categories, setCategories] = React.useState([])
 
     React.useEffect(async () => {
-        await fetch("/api/admin/categories/").then(async (r) => {
+        await fetch("/api/store/admin/categories/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setCategories(data)
             else console.error(data)
@@ -34,7 +34,7 @@ const Products = () => {
     }
 
     const update = () => {
-        fetch("/api/admin/products/").then(async (r) => {
+        fetch("/api/store/admin/products/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setProducts(data)
             else console.error(data)
@@ -42,7 +42,7 @@ const Products = () => {
     }
 
     const edit = (id) => {
-        fetch(`/api/admin/products/${id}/`).then(async (r) => {
+        fetch(`/api/store/admin/products/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
                 setProduct(data)
@@ -54,7 +54,7 @@ const Products = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/admin/products/${id}/`, {
+            fetch(`/api/store/admin/products/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -70,7 +70,7 @@ const Products = () => {
 
     const save = () => {
         if (product.id) {
-            fetch(`/api/admin/products/${product.id}/`, {
+            fetch(`/api/store/admin/products/${product.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -86,7 +86,7 @@ const Products = () => {
                 } else setError(data)
             })
         } else {
-            fetch("/api/admin/products/", {
+            fetch("/api/store/admin/products/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -109,7 +109,7 @@ const Products = () => {
         Array.from(e.target.files).forEach((file, index) => {
             formData.append(index, file)
         })
-        fetch("/api/admin/products/upload/", {
+        fetch("/api/store/admin/products/upload/", {
             method: "POST",
             headers: {"X-CSRFToken": cookies.csrftoken},
             body: formData,

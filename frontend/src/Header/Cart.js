@@ -48,7 +48,7 @@ const Cart = () => {
         <>
             <Button className="m-1" variant="light" dir="ltr" onClick={() => setShow(true)}>
                 <i className="fa-solid fa-cart-shopping ms-1"></i>
-                <Badge bg="danger">{items.length}</Badge>
+                {items.length > 0 ? <Badge bg="danger">{items.length}</Badge> : null}
             </Button>
             <Offcanvas show={show} onHide={() => setShow(false)} placement="end">
                 <Offcanvas.Header closeButton>

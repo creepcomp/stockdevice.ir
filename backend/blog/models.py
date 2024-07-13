@@ -9,10 +9,10 @@ class Blog(models.Model):
     image = models.CharField(max_length=64, null=True)
     author = models.ForeignKey(User, models.CASCADE)
     keywords = models.CharField(max_length=256, null=True)
+    slug = models.SlugField(allow_unicode=True)
+    show = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    show = models.BooleanField(default=False)
-    slug = models.SlugField(allow_unicode=True)
 
     @property
     def description(self):
@@ -31,5 +31,6 @@ class Comment(models.Model):
     content = models.CharField(max_length=256)
     reply = models.CharField(max_length=256, null=True)
     score = models.PositiveSmallIntegerField(null=True)
+    show = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

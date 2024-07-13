@@ -7,7 +7,7 @@ const Register = () => {
     const [show, setShow] = React.useState(false)
     const [input, setInput] = React.useState({})
     const [error, setError] = React.useState({})
-    const [success, setSuccess] = React.useState()
+    const [success, setSuccess] = React.useState({})
     const [sended, setSended] = React.useState(false)
 
     const register = () => {
@@ -22,7 +22,7 @@ const Register = () => {
         }).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
-                setSuccess("حساب کاربری با موفقیت ایجاد شد.")
+                setSuccess(data)
                 document.location.reload()
             }
             else setError(data)
@@ -56,7 +56,7 @@ const Register = () => {
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>ثبت نام حساب کاربری</Modal.Header>
                 <Modal.Body>
-                    {success ? <Alert variant="success">{success}</Alert>: null}
+                    {success.detail ? <Alert variant="success">{success.detail}</Alert>: null}
                     {error.detail ? <Alert variant="danger">{error.detail}</Alert> : null}
                     <Row>
                         <Col>

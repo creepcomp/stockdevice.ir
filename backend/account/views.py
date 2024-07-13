@@ -1,12 +1,13 @@
 import random, requests, re, os
 from django.contrib.auth import login, logout, authenticate
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 from datetime import datetime
 from .models import User
-from .serializers import UserSerializer, UserUpdateSerializer
+from .serializers import UserSerializer, UserUpdateSerializer, UserAdminSerializer
 
 def send_sms(to, text):
     return requests.post("https://rest.payamak-panel.com/api/SendSMS/SendSMS", json={
@@ -133,3 +134,20 @@ class AccountViewSet(ViewSet):
                 return Response(serializer.errors, 400)
         else:
             return Response({"detail": "ابتدا وارد حساب کاربری خود شوید."}, 400)
+
+class UserAdminViewSet(ModelViewSet):
+    queryset = User.objects
+    serializer_class = UserAdminSerializer
+    permission_classes = [IsAdminUser]
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        if "password" in self.request.data:
+            user.set_password(self.request.data.get("password"))
+            user.save()
+    
+    def perform_update(self, serializer):
+        user = serializer.save()
+        if "password" in self.request.data:
+            user.set_password(self.request.data.get("password"))
+            user.save()

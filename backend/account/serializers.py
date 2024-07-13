@@ -8,6 +8,11 @@ class UserSerializer(ModelSerializer):
         model = User
         exclude = ["password"]
 
+class UserAdminSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ["password"]
+
 class UserUpdateSerializer(ModelSerializer):
     first_name = CharField(required=True)
     last_name = CharField(required=True)

@@ -10,7 +10,7 @@ const Comments = () => {
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/store/admin/comments/").then(async (r) => {
+        fetch("/api/blog/admin/comments/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setComments(data)
             else console.error(data)
@@ -20,7 +20,7 @@ const Comments = () => {
     React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/store/admin/comments/${id}/`).then(async (r) => {
+        fetch(`/api/blog/admin/comments/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
                 setComment(data)
@@ -32,7 +32,7 @@ const Comments = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/store/admin/comments/${id}/`, {
+            fetch(`/api/blog/admin/comments/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -47,7 +47,7 @@ const Comments = () => {
     }
 
     const save = () => {
-        fetch(`/api/store/admin/comments/${comment.id}/`, {
+        fetch(`/api/blog/admin/comments/${comment.id}/`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",
@@ -75,7 +75,7 @@ const Comments = () => {
                     <tr>
                         <td>#</td>
                         <td>کاربر</td>
-                        <td>محصول</td>
+                        <td>مطلب</td>
                         <td>نمایش داده شود.</td>
                         <td className="d-print-none">عملیات</td>
                     </tr>
@@ -85,7 +85,7 @@ const Comments = () => {
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.user.first_name} {x.user.last_name} ({x.user.username})</td>
-                            <td><a href={"/store/product/" + x.product.id}>{x.product.name}</a></td>
+                            <td><a href={"/blog/" + x.blog.id}>{x.blog.title}</a></td>
                             <td>{x.show ? "بله" : "خیر"}</td>
                             <td className="d-print-none">
                                 <Button className="m-1" variant="secondary" onClick={() => edit(x.id)}>
@@ -107,12 +107,12 @@ const Comments = () => {
                     {error.detail ? <Alert classID="m-1 p-2" variant="danger">{error.detail}</Alert>: null}
                     <Row>
                         <Col md>
-                            <Form.Label>کاربر:</Form.Label>
-                            {comment.user ? <span>{comment.user.first_name} {comment.user.last_name} ({comment.user.username})</span> : null}
+                            <Form.Label>کاربر: </Form.Label>
+                            {comment.user ? <span>{comment.user.first_name} {comment.user.last_name} ({comment.user.username})</span> : "-"}
                         </Col>
                         <Col>
-                            <Form.Label>محصول:</Form.Label>
-                            {comment.product ? <a href={"/store/product/" + comment.product.id}>{comment.product.name}</a> : null}
+                            <Form.Label>مطلب: </Form.Label>
+                            {comment.blog ? <a href={"/blog/" + comment.blog.id}>{comment.blog.title}</a> : "-"}
                         </Col>
                     </Row>
                     <Form.Label>محتوا:</Form.Label>

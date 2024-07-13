@@ -8,14 +8,25 @@ class Category(models.Model):
     parent = models.ForeignKey("self", models.CASCADE, null=True)
     keywords = models.CharField(max_length=256, null=True)
     description = models.TextField(null=True)
-    show = models.BooleanField(default=False)
     slug = models.SlugField(allow_unicode=True)
+    home = models.BooleanField(default=False)
+    show = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
     @property
+    def children(self):
+        return Category.objects.filter(parent=self)
+    
+    @property
     def products(self):
-        return Product.objects.filter(category=self)
+        products = Product.objects.filter(show=True, category=self)
+        for child in self.children:
+            products = products | child.products
+        return products
+    
+    def get_absolute_url(self):
+        return "/store/category/%d/%s" % (self.id, self.slug)
 
     class Meta:
         ordering = ["id"]
@@ -29,9 +40,9 @@ class Product(models.Model):
     specification = models.JSONField(null=True)
     body = models.TextField(null=True)
     keywords = models.CharField(max_length=256, null=True)
-    show = models.BooleanField(default=False)
     images = models.JSONField(null=True)
     slug = models.SlugField(allow_unicode=True)
+    show = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -52,6 +63,7 @@ class Comment(models.Model):
     content = models.CharField(max_length=256)
     reply = models.CharField(max_length=256, null=True)
     score = models.PositiveSmallIntegerField(null=True)
+    show = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

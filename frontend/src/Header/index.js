@@ -7,7 +7,8 @@ import Login from "../Account/Login"
 import Register from "../Account/Register"
 
 const Header = () => {
-    const {user, setUser} = React.useContext(UserContext)
+    const {user} = React.useContext(UserContext)
+    const [show, setShow] = React.useState(false)
 
     return (
         <Container className="bg-primary d-print-none" fluid>
@@ -15,7 +16,7 @@ const Header = () => {
                 <Navbar.Brand href="/">
                     <Image className="me-2" src="/logo.png" rel="استوک دیوایس" width={25} fluid />
                 </Navbar.Brand>
-                <Navbar.Offcanvas>
+                <Navbar.Offcanvas show={show} onHide={() => setShow(false)}>
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title>استوک دیوایس</Offcanvas.Title>
                     </Offcanvas.Header>
@@ -41,7 +42,7 @@ const Header = () => {
                         </>}
                     </div>
                 </Nav>
-                <Navbar.Toggle className="m-1" />
+                <Navbar.Toggle onClick={() => setShow(true)} className="m-1" />
             </Navbar>
         </Container>
     )

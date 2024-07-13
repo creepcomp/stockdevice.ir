@@ -24,7 +24,7 @@ const BlogPage = () => {
                     <meta name="keywords" content={blog.keywords} />
                     <meta name="description" content={blog.description} />
                 </Helmet>
-                <div>
+                <div className="position-relative">
                     <Ratio aspectRatio="16x9">
                         <Image className="rounded-top" src={"/media/" + blog.image} rel={blog.title} alt="" fluid />
                     </Ratio>
@@ -33,9 +33,7 @@ const BlogPage = () => {
                         <small className="d-block">تاریخ: {new Date(blog.created_at).toLocaleDateString("fa")}</small>
                     </div>
                 </div>
-                <p className="m-2 text-truncate" dir="auto">
-                    <Markdown>{blog.body}</Markdown>
-                </p>
+                <Markdown className="m-2 text-truncate">{blog.body}</Markdown>
                 {blog.keywords ? (
                     <div className="d-flex flex-wrap justify-content-evenly align-items-center border-top">
                         {blog.keywords.split(", ").map((x, i) => <strong key={i} className="m-1">#{x}</strong>)}

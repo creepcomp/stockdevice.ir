@@ -6,3 +6,11 @@
 body {
     font-family: vazir !important;
 }
+
+.carousel-control-prev {
+    transform: rotate(180deg)
+}
+
+.carousel-control-next {
+    transform: rotate(180deg)
+}

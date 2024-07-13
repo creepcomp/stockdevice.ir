@@ -2,11 +2,12 @@ import io, requests, os
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from PIL import Image, ImageDraw, ImageFont
 from .models import Product, Category, Comment, Order, Item
 from .serializers import ProductSerializer, ProductListSerializer, CategorySerializer, CommentSerializer, OrderSerializer, ItemSerializer
+from .serializers import ProductAdminSerializer, CategoryAdminSerializer, CommentAdminSerializer, OrderAdminSerializer
 
 class ProductViewSet(ReadOnlyModelViewSet):
     queryset = Product.objects.filter(show=True, available__gt=0)
@@ -29,7 +30,7 @@ class CategoryViewSet(ReadOnlyModelViewSet):
     permission_classes = []
 
 class CommentViewSet(ModelViewSet):
-    queryset = Comment.objects
+    queryset = Comment.objects.filter(show=True)
     serializer_class = CommentSerializer
     permission_classes = []
 
@@ -142,3 +143,42 @@ class ItemViewSet(ModelViewSet):
         if item.user != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
         return super().destroy(request, *args, **kwargs)
+
+class ProductAdminViewSet(ModelViewSet):
+    queryset = Product.objects
+    serializer_class = ProductAdminSerializer
+    permission_classes = [IsAdminUser]
+
+    @action(["POST"], False)
+    def upload(self, request):
+        images = []
+        for filename, file in request.FILES.items():
+            filename = f"{uuid.uuid4()}.jpg"
+            image = Image.open(io.BytesIO(file.read())).convert("RGB")
+            width, height = image.size
+            offset  = int(abs(height-width)/2)
+            if width>height:
+                image = image.crop([offset, 0, width - offset, height])
+            else:
+                image = image.crop([0, offset, width, height - offset])
+            image.resize([1000, 1000])
+            draw = ImageDraw.Draw(image)
+            draw.text((25, image.height - 50), "stockdevice.ir", (0, 0, 0), ImageFont.load_default(size=32))
+            image.save(f"media/{filename}", "jpeg")
+            images.append(filename)
+        return Response({"status": "success", "images": images})
+
+class CategoryAdminViewSet(ModelViewSet):
+    queryset = Category.objects
+    serializer_class = CategoryAdminSerializer
+    permission_classes = [IsAdminUser]
+
+class CommentAdminViewSet(ModelViewSet):
+    queryset = Comment.objects
+    serializer_class = CommentAdminSerializer
+    permission_classes = [IsAdminUser]
+
+class OrderAdminViewSet(ModelViewSet):
+    queryset = Order.objects
+    serializer_class = OrderAdminSerializer
+    permission_classes = [IsAdminUser]

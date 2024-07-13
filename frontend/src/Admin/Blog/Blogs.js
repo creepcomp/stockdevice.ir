@@ -1,7 +1,7 @@
 import React from "react"
 import {Modal, Form, Button, Row, Col, Table, Alert, Image} from "react-bootstrap"
 import {useCookies} from "react-cookie"
-import {slugify} from "./Utils"
+import {slugify} from "../Utils"
 
 const Blogs = () => {
     const [cookies] = useCookies()
@@ -11,7 +11,7 @@ const Blogs = () => {
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/admin/blogs/").then(async (r) => {
+        fetch("/api/blog/admin/blogs/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setBlogs(data)
             else console.error(data)
@@ -21,7 +21,7 @@ const Blogs = () => {
     React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/admin/blogs/${id}/`).then(async (r) => {
+        fetch(`/api/blog/admin/blogs/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
                 setBlog(data)
@@ -33,7 +33,7 @@ const Blogs = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/admin/blogs/${id}/`, {
+            fetch(`/api/blog/admin/blogs/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -50,7 +50,7 @@ const Blogs = () => {
     const upload = (e) => {
         const formData = new FormData()
         formData.append("image", e.target.files[0])
-        fetch("/api/admin/blogs/upload/", {
+        fetch("/api/blog/admin/blogs/upload/", {
             method: "POST",
             headers: {"X-CSRFToken": cookies.csrftoken},
             body: formData,
@@ -63,7 +63,7 @@ const Blogs = () => {
 
     const save = () => {
         if (blog.id) {
-            fetch(`/api/admin/blogs/${blog.id}/`, {
+            fetch(`/api/blog/admin/blogs/${blog.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -79,7 +79,7 @@ const Blogs = () => {
                 } else setError(data)
             })
         } else {
-            fetch("/api/admin/blogs/", {
+            fetch("/api/blog/admin/blogs/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",

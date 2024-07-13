@@ -24,32 +24,11 @@ class ProductListSerializer(ModelSerializer):
         fields = ["id", "name", "slug", "price", "discount", "images", "available", "specification", "description"]
 
 class CategorySerializer(ModelSerializer):
-    parent = SerializerMethodField()
     products = ProductListSerializer(read_only=True, many=True)
-
-    def get_parent(self, instance):
-        if instance.parent:
-            return CategorySerializer(instance.parent).data
-        return None
 
     class Meta:
         model = Category
         fields = "__all__"
-
-    def to_internal_value(self, data):
-        internal_value = super().to_internal_value(data)
-        parent_id = data.get('parent')
-        if parent_id:
-            try:
-                parent = Category.objects.get(id=parent_id)
-                internal_value['parent'] = parent
-            except Category.DoesNotExist:
-                raise serializers.ValidationError({
-                    'parent': 'Invalid parent category ID'
-                })
-        else:
-            internal_value['parent'] = None
-        return internal_value
 
 class CommentSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -77,6 +56,47 @@ class OrderSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
     items = ItemSerializer(read_only=True, many=True)
     price = IntegerField(read_only=True)
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+class ProductAdminSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+class CategoryAdminSerializer(ModelSerializer):
+    parent = SerializerMethodField()
+
+    def get_parent(self, instance):
+        if instance.parent:
+            return CategorySerializer(instance.parent).data
+        return None
+    
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+class CommentAdminSerializer(ModelSerializer):
+    user = UserSerializer(read_only=True)
+    product = ProductAdminSerializer(read_only=True)
+    class Meta:
+        model = Comment
+        fields = "__all__"
+
+class ItemAdminSerializer(ModelSerializer):
+    product = ProductAdminSerializer(read_only=True)
+    price = IntegerField(read_only=True)
+
+    class Meta:
+        model = Item
+        fields = "__all__"
+
+class OrderAdminSerializer(ModelSerializer):
+    user = UserSerializer(read_only=True)
+    items = ItemAdminSerializer(read_only=True, many=True)
+    price = IntegerField(read_only=True)
+
     class Meta:
         model = Order
         fields = "__all__"

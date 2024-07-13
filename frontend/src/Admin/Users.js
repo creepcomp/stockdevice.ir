@@ -10,7 +10,7 @@ const Users = () => {
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/admin/users/").then(async (r) => {
+        fetch("/api/account/admin/users/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setUsers(data)
             else console.error(data)
@@ -20,7 +20,7 @@ const Users = () => {
     React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/admin/users/${id}/`).then(async (r) => {
+        fetch(`/api/account/admin/users/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
                 setUser(data)
@@ -32,7 +32,7 @@ const Users = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/admin/users/${id}/`, {
+            fetch(`/api/account/admin/users/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -48,7 +48,7 @@ const Users = () => {
 
     const save = () => {
         if (user.id) {
-            fetch(`/api/admin/users/${user.id}/`, {
+            fetch(`/api/account/admin/users/${user.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -64,7 +64,7 @@ const Users = () => {
                 } else setError(data)
             })
         } else {
-            fetch("/api/admin/users/", {
+            fetch("/api/account/admin/users/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",

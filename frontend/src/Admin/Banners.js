@@ -10,7 +10,7 @@ const Banners = () => {
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/admin/banners/").then(async (r) => {
+        fetch("/api/home/admin/banners/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setBanners(data)
             else setError(data)
@@ -20,7 +20,7 @@ const Banners = () => {
     React.useEffect(update, [])
 
     const edit = (id) => {
-        fetch(`/api/admin/banners/${id}/`).then(async (r) => {
+        fetch(`/api/home/admin/banners/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
                 setBanner(data)
@@ -32,7 +32,7 @@ const Banners = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/admin/banners/${id}/`, {
+            fetch(`/api/home/admin/banners/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -48,7 +48,7 @@ const Banners = () => {
 
     const save = () => {
         if (banner.id) {
-            fetch(`/api/admin/banners/${banner.id}/`, {
+            fetch(`/api/home/admin/banners/${banner.id}/`, {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -64,7 +64,7 @@ const Banners = () => {
                 } else setError(data)
             })
         } else {
-            fetch("/api/admin/banners/", {
+            fetch("/api/home/admin/banners/", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -85,7 +85,7 @@ const Banners = () => {
     const upload = (e) => {
         const formData = new FormData()
         formData.append("image", e.target.files[0])
-        fetch("/api/admin/banners/upload/", {
+        fetch("/api/home/admin/banners/upload/", {
             method: "POST",
             headers: {"X-CSRFToken": cookies.csrftoken},
             body: formData,

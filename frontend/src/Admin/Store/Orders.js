@@ -10,7 +10,7 @@ const Orders = () => {
     const [error, setError] = React.useState({})
 
     const update = () => {
-        fetch("/api/admin/orders/").then(async (r) => {
+        fetch("/api/store/admin/orders/").then(async (r) => {
             const data = await r.json()
             if (r.ok) setOrders(data)
             else console.error(data)
@@ -33,7 +33,7 @@ const Orders = () => {
     const _delete = (id) => {
         const confirm = window.confirm("آیا میخواهید ادامه دهید؟ (پاک کردن)")
         if (confirm) {
-            fetch(`/api/admin/orders/${id}/`, {
+            fetch(`/api/store/admin/orders/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -48,7 +48,7 @@ const Orders = () => {
     }
 
     const edit = (id) => {
-        fetch(`/api/admin/orders/${id}/`).then(async (r) => {
+        fetch(`/api/store/admin/orders/${id}/`).then(async (r) => {
             const data = await r.json()
             if (r.ok) {
                 setOrder(data)
@@ -58,7 +58,7 @@ const Orders = () => {
     }
 
     const save = () => {
-        fetch(`/api/admin/orders/${order.id}/`, {
+        fetch(`/api/store/admin/orders/${order.id}/`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",

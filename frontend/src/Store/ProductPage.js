@@ -94,9 +94,7 @@ const ProductPage = () => {
                 {product.body ? (
                     <div className="bg-light rounded mb-1 p-1">
                         <h4 className="border-bottom p-2 text-center">توضیحات</h4>
-                        <p className="m-2 text-truncate" dir="auto">
-                            <Markdown>{product.body}</Markdown>
-                        </p>
+                        <Markdown className="m-2 text-truncate">{product.body}</Markdown>
                     </div>
                 ) : null}
             </div>
