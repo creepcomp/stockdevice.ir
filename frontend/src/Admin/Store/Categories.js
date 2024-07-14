@@ -90,8 +90,9 @@ const Categories = () => {
     }
 
     return (
-        <>
-            <Table className="align-middle">
+        <div className="bg-white rounded shadow p-2">
+            <h4 className="text-center pb-2 border-bottom">دسته بندی ها</h4>
+            <Table className="align-middle m-1">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -101,11 +102,11 @@ const Categories = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {categories.map((x, i) => (
+                    {categories.length > 0 ? categories.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.name}</td>
-                            <td>{x.parent ? x.parent.name : "اصلی"}</td>
+                            <td>{x.parent ? categories[x.parent].name : "اصلی"}</td>
                             <td className="d-print-none">
                                 <Button variant="secondary" className="m-1" href={"/store/?category=" + x.id}>
                                     <i className="fa-solid fa-eye" />
@@ -118,9 +119,10 @@ const Categories = () => {
                                 </Button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <td colSpan="4" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
+            <Button className="w-100" onClick={() => {setCategory({}); setShow(true)}}>اضافه کردن</Button>
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
@@ -163,17 +165,7 @@ const Categories = () => {
                     <Button onClick={save}>ذخیره</Button>
                 </Modal.Footer>
             </Modal>
-            <div className="fixed-bottom text-end">
-                <Button
-                    className="m-1"
-                    onClick={() => {
-                        setShow(true)
-                        setCategory({})
-                    }}>
-                    <i className="fa-solid fa-plus" />
-                </Button>
-            </div>
-        </>
+        </div>
     )
 }
 

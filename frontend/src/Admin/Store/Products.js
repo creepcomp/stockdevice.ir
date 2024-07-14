@@ -128,8 +128,9 @@ const Products = () => {
     }
 
     return (
-        <>
-            <Table className="align-middle">
+        <div className="bg-white rounded shadow p-2">
+            <h4 className="text-center pb-2 border-bottom">دسته بندی ها</h4>
+            <Table className="align-middle m-1">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -139,7 +140,7 @@ const Products = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((x, i) => (
+                    {products.length > 0 ? products.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.name}</td>
@@ -156,9 +157,10 @@ const Products = () => {
                                 </Button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <td colSpan="4" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
+            <Button className="w-100" onClick={() => {init(); setShow(true)}}>اضافه کردن</Button>
             <Modal show={show} size="lg" onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
@@ -288,17 +290,7 @@ const Products = () => {
                     <Button onClick={save}>ذخیره</Button>
                 </Modal.Footer>
             </Modal>
-            <div className="fixed-bottom text-end">
-                <Button
-                    className="d-print-none m-1"
-                    onClick={() => {
-                        init()
-                        setShow(true)
-                    }}>
-                    <i className="fa-solid fa-plus" />
-                </Button>
-            </div>
-        </>
+        </div>
     )
 }
 

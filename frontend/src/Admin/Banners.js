@@ -101,8 +101,9 @@ const Banners = () => {
     }
 
     return (
-        <>
-            <Table className="align-middle">
+        <div className="bg-white rounded shadow m-1 p-2">
+            <h4 className="text-center pb-2 border-bottom">بنر ها</h4>
+            <Table className="align-middle m-1">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -111,7 +112,7 @@ const Banners = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {banners.map((x, i) => (
+                    {banners.length > 0 ? banners.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>
@@ -126,9 +127,10 @@ const Banners = () => {
                                 </Button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <td colSpan="3" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
+            <Button className="w-100" onClick={() => {setBanner({}); setShow(true)}}>اضافه کردن</Button>
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
@@ -161,17 +163,7 @@ const Banners = () => {
                     <Button onClick={save}>ذخیره</Button>
                 </Modal.Footer>
             </Modal>
-            <div className="fixed-bottom text-end">
-                <Button
-                    className="m-1"
-                    onClick={() => {
-                        setShow(true)
-                        setBanner({})
-                    }}>
-                    <i className="fa-solid fa-plus" />
-                </Button>
-            </div>
-        </>
+        </div>
     )
 }
 

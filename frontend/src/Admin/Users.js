@@ -87,8 +87,9 @@ const Users = () => {
     }
 
     return (
-        <>
-            <Table className="align-middle">
+        <div className="bg-white rounded shadow m-1 p-2">
+            <h4 className="text-center pb-2 border-bottom">کاربران</h4>
+            <Table className="align-middle m-1">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -99,7 +100,7 @@ const Users = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((x, i) => (
+                    {users.length > 0 ? users.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.username}</td>
@@ -118,9 +119,10 @@ const Users = () => {
                                 </Button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <td colSpan="5" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
+            <Button className="w-100" onClick={() => {setNote({}); setShow(true)}}>اضافه کردن</Button>
             <Modal show={show} size="lg" onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
@@ -167,17 +169,7 @@ const Users = () => {
                     <Button onClick={save}>ذخیره</Button>
                 </Modal.Footer>
             </Modal>
-            <div className="fixed-bottom text-end">
-                <Button
-                    className="m-1"
-                    onClick={() => {
-                        setShow(true)
-                        setUser({})
-                    }}>
-                    <i className="fa-solid fa-plus" />
-                </Button>
-            </div>
-        </>
+        </div>
     )
 }
 

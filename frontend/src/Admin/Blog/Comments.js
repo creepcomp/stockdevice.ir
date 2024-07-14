@@ -69,8 +69,9 @@ const Comments = () => {
     }
 
     return (
-        <>
-            <Table className="align-middle">
+        <div className="bg-white rounded shadow p-2">
+            <h4 className="text-center pb-2 border-bottom">دیدگاه ها</h4>
+            <Table className="align-middle m-1">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -81,7 +82,7 @@ const Comments = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {comments.map((x, i) => (
+                    {comments.length > 0 ? comments.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.user.first_name} {x.user.last_name} ({x.user.username})</td>
@@ -96,7 +97,7 @@ const Comments = () => {
                                 </Button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <td colSpan="5" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
             <Modal show={show} onHide={() => setShow(false)}>
@@ -130,7 +131,7 @@ const Comments = () => {
                     <Button onClick={save}>ذخیره</Button>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     )
 }
 

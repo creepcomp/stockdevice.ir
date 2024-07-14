@@ -102,22 +102,27 @@ const Blogs = () => {
     }
 
     return (
-        <>
-            <Table className="align-middle">
+        <div className="bg-white rounded shadow p-2">
+            <h4 className="text-center pb-2 border-bottom">مطالب</h4>
+            <Table className="align-middle m-1">
                 <thead>
                     <tr>
                         <td>#</td>
                         <td>عنوان</td>
                         <td>نویسنده</td>
+                        <td>تاریخ ایجاد</td>
+                        <td>آخرین ویرایش</td>
                         <td className="d-print-none">عملیات</td>
                     </tr>
                 </thead>
                 <tbody>
-                    {blogs.map((x, i) => (
+                    {blogs.length > 0 ? blogs.map((x, i) => (
                         <tr key={i}>
                             <td>{x.id}</td>
                             <td>{x.title}</td>
                             <td>{x.author.first_name} {x.author.last_name}</td>
+                            <td><span dir="ltr">{new Date(x.created_at).toLocaleString("fa")}</span></td>
+                            <td><span dir="ltr">{new Date(x.modified_at).toLocaleString("fa")}</span></td>
                             <td className="d-print-none">
                                 <Button variant="secondary" className="m-1" href={"/blog/" + x.id}>
                                     <i className="fa-solid fa-eye" />
@@ -130,9 +135,10 @@ const Blogs = () => {
                                 </Button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <td colSpan="6" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
+            <Button className="w-100" onClick={() => {setBlog({}); setShow(true)}}>اضافه کردن</Button>
             <Modal show={show} size="xl" onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
@@ -152,7 +158,7 @@ const Blogs = () => {
                         </Col>
                     </Row>
                     <Form.Label>محتوا:</Form.Label>
-                    <Form.Control name="body" as="textarea" value={blog.body} onChange={handleChange} isInvalid={error.body} />
+                    <Form.Control name="body" as="textarea" rows="25" value={blog.body} onChange={handleChange} isInvalid={error.body} />
                     <Form.Control.Feedback type="invalid">{error.body}</Form.Control.Feedback>
                     <Row>
                         <Col lg>
@@ -189,17 +195,7 @@ const Blogs = () => {
                     <Button onClick={save}>ذخیره</Button>
                 </Modal.Footer>
             </Modal>
-            <div className="fixed-bottom text-end">
-                <Button
-                    className="m-1"
-                    onClick={() => {
-                        setShow(true)
-                        setBlog({})
-                    }}>
-                    <i className="fa-solid fa-plus" />
-                </Button>
-            </div>
-        </>
+        </div>
     )
 }
 

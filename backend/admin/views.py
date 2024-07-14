@@ -7,8 +7,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from datetime import timedelta
 from PIL import Image, ImageDraw, ImageFont
-from .models import Request
-from .serializers import RequestSerializer
+from .models import Note, Request
+from .serializers import NoteSerializer, RequestSerializer
+
+class NoteViewSet(ModelViewSet):
+    queryset = Note.objects
+    serializer_class = NoteSerializer
+    permission_classes = [IsAdminUser]
 
 class RequestViewSet(ModelViewSet):
     queryset = Request.objects

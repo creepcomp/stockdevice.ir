@@ -66,13 +66,6 @@ class ProductAdminSerializer(ModelSerializer):
         fields = "__all__"
 
 class CategoryAdminSerializer(ModelSerializer):
-    parent = SerializerMethodField()
-
-    def get_parent(self, instance):
-        if instance.parent:
-            return CategorySerializer(instance.parent).data
-        return None
-    
     class Meta:
         model = Category
         fields = "__all__"
