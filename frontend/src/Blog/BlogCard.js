@@ -6,7 +6,7 @@ const BlogCard = ({blog, className}) => {
         <Card className={"text-center " + className}>
             <Ratio aspectRatio="16x9">
                 <a href={`/blog/${blog.id}/${blog.slug}`}>
-                    <Card.Img src={"/media/" + blog.image} alt="" />
+                    <Card.Img src={"/media/" + blog.image} alt={blog.title} />
                 </a>
             </Ratio>
             <Card.Body className="bg-light bg-opacity-75 rounded-bottom w-100 position-absolute bottom-0 p-1">

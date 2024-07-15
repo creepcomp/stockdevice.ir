@@ -6,7 +6,7 @@ import Markdown from "react-markdown"
 import Comments from "./Comments"
 import ProductAddToCart from "./ProductAddToCart"
 
-const ProductPage = () => {
+const Product = () => {
     const {id} = useParams()
     const [product, setProduct] = React.useState({})
     const [error, setError] = React.useState({})
@@ -35,7 +35,7 @@ const ProductPage = () => {
                                 <Carousel>
                                     {product.images.map((x, i) => (
                                         <Carousel.Item key={i}>
-                                            <Image src={"/media/" + x} rel={product.name} rounded fluid />
+                                            <Image src={"/media/" + x} alt={product.name} rounded fluid />
                                         </Carousel.Item>
                                     ))}
                                 </Carousel>
@@ -103,4 +103,4 @@ const ProductPage = () => {
     )
 }
 
-export default ProductPage
+export default Product

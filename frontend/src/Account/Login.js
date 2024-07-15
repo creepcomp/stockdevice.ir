@@ -3,7 +3,7 @@ import {Alert, Button, Form, Modal} from "react-bootstrap"
 import {useCookies} from "react-cookie"
 import ChangePassword from "./ChangePassword"
 
-const Login = () => {
+const Login = ({className}) => {
     const [cookies] = useCookies()
     const [show, setShow] = React.useState()
     const [user, setUser] = React.useState({})
@@ -33,7 +33,7 @@ const Login = () => {
 
     return (
         <>
-            <Button variant="light" className="m-1" onClick={() => setShow(true)}>ورود</Button>
+            <Button variant="light" className={className} onClick={() => setShow(true)}>ورود</Button>
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>ورود به حساب کاربری</Modal.Header>
                 <Modal.Body>

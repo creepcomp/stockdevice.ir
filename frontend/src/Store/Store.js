@@ -1,13 +1,10 @@
 import React from "react"
 import {Container, Form, Row, Col, Button} from "react-bootstrap"
-import ProductCard from "./ProductCard"
 import { Helmet } from "react-helmet"
 import Products from "./Products"
-import { useParams } from "react-router-dom"
 
-const StorePage = ({category = false}) => {
+const Store = ({category = false}) => {
     const query = new URLSearchParams(window.location.search)
-    const {search} = useParams()
     const [products, setProducts] = React.useState([])
     const [filter, setFilter] = React.useState({name__icontains: query.get("search")})
     const [categories, setCategories] = React.useState([])
@@ -80,4 +77,4 @@ const StorePage = ({category = false}) => {
     )
 }
 
-export default StorePage
+export default Store

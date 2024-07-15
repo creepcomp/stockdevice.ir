@@ -14,7 +14,7 @@ const Header = () => {
         <Container className="bg-primary d-print-none" fluid>
             <Navbar variant="dark" expand="lg">
                 <Navbar.Brand href="/">
-                    <Image className="me-2" src="/logo.png" rel="استوک دیوایس" width={25} fluid />
+                    <Image className="me-2" src="/logo.png" alt="استوک دیوایس" width={25} fluid />
                 </Navbar.Brand>
                 <Navbar.Offcanvas show={show} onHide={() => setShow(false)}>
                     <Offcanvas.Header closeButton>
@@ -38,7 +38,7 @@ const Header = () => {
                             </Button>
                             <Cart />
                         </> : <>
-                            <Login />
+                            <Login className="me-1" />
                             <Register />
                         </>}
                     </div>

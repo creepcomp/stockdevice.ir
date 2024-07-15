@@ -10,13 +10,11 @@ const ProductCard = ({product, className}) => {
                         <Carousel indicators={false}>
                             {product.images.map((x, i) => (
                                 <Carousel.Item key={i}>
-                                    <Card.Img src={"/media/" + x} rel={product.name} />
+                                    <Card.Img src={"/media/" + x} alt={product.name} />
                                 </Carousel.Item>
                             ))}
                         </Carousel>
-                    ) : (
-                        <Card.Img rel={product.name} />
-                    )}
+                    ) : <Card.Img />}
                 </Ratio>
             </a>
             <Card.Body className="bg-light bg-opacity-75 rounded-bottom w-100 position-absolute bottom-0 p-1">

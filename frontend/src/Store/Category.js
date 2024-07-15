@@ -1,11 +1,10 @@
 import React from "react";
-import StorePage from "./StorePage";
 import {useParams} from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Container } from "react-bootstrap";
 import Products from "./Products";
 
-const CategoryPage = () => {
+const Category = () => {
     const {id} = useParams();
     const [category, setCategory] = React.useState({});
     React.useEffect(() => {
@@ -30,4 +29,4 @@ const CategoryPage = () => {
     );
 };
 
-export default CategoryPage;
+export default Category;

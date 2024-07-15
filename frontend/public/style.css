@@ -39,3 +39,11 @@ body {
 .card:hover .dropdown-menu {
     display: block !important
 }
+
+.text-justify {
+    text-align: justify;
+}
+
+img {
+    display: none;
+}
