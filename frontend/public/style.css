@@ -7,10 +7,35 @@ body {
     font-family: vazir !important;
 }
 
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 .carousel-control-prev {
     transform: rotate(180deg)
 }
 
 .carousel-control-next {
     transform: rotate(180deg)
+}
+
+.dropdown-toggle::after {
+    display: none !important
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block
+}
+
+.card {
+    border: none !important
+}
+
+.card:hover .card-body {
+    display: none
+}
+
+.card:hover .dropdown-menu {
+    display: block !important
 }

@@ -1,10 +1,10 @@
 import React from "react"
 import {Button, Container, Image, Nav, Navbar, Offcanvas} from "react-bootstrap"
-import "./style.css"
 import Cart from "./Cart"
 import { UserContext } from "../Account/UserContext"
 import Login from "../Account/Login"
 import Register from "../Account/Register"
+import Search from "./Search"
 
 const Header = () => {
     const {user} = React.useContext(UserContext)
@@ -27,6 +27,7 @@ const Header = () => {
                             <Nav.Link href="#ContactUs">درباره ما</Nav.Link>
                             <Nav.Link href="#ContactUs">تماس با ما</Nav.Link>
                         </Nav>
+                        <Search />
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
                 <Nav className="ms-auto">

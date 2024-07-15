@@ -22,6 +22,9 @@ class ProductViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         kwargs = self.request.query_params.dict()
+        if "category" in kwargs:
+            queryset = Category.objects.get(id=kwargs["category"]).products
+            kwargs.pop("category")
         return queryset.filter(**kwargs)
 
 class CategoryViewSet(ReadOnlyModelViewSet):

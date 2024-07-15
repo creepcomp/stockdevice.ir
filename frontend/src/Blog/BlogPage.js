@@ -7,7 +7,7 @@ import Comments from "./Comments"
 
 const BlogPage = () => {
     const {id} = useParams()
-    const [blog, setBlog] = React.useState({})
+    const [blog, setBlog] = React.useState({author: {}})
     React.useEffect(() => {
         fetch(`/api/blog/blogs/${id}/`).then(async (r) => {
             const data = await r.json()
@@ -23,6 +23,7 @@ const BlogPage = () => {
                     <title>{`${blog.title} | استوک دیوایس`}</title>
                     <meta name="keywords" content={blog.keywords} />
                     <meta name="description" content={blog.description} />
+                    <meta name="author" content={blog.author.first_name + " " + blog.author.last_name} />
                 </Helmet>
                 <div className="position-relative">
                     <Ratio aspectRatio="16x9">
@@ -30,6 +31,7 @@ const BlogPage = () => {
                     </Ratio>
                     <div className="position-absolute start-50 top-50 translate-middle bg-dark bg-opacity-50 rounded text-light text-center p-2">
                         <h1>{blog.title}</h1>
+                        <small className="d-block">نویسنده: {blog.author.first_name} {blog.author.last_name}</small>
                         <small className="d-block">تاریخ: {new Date(blog.created_at).toLocaleDateString("fa")}</small>
                     </div>
                 </div>

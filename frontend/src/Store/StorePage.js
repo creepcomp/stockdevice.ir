@@ -2,10 +2,14 @@ import React from "react"
 import {Container, Form, Row, Col, Button} from "react-bootstrap"
 import ProductCard from "./ProductCard"
 import { Helmet } from "react-helmet"
+import Products from "./Products"
+import { useParams } from "react-router-dom"
 
 const StorePage = ({category = false}) => {
+    const query = new URLSearchParams(window.location.search)
+    const {search} = useParams()
     const [products, setProducts] = React.useState([])
-    const [filter, setFilter] = React.useState({})
+    const [filter, setFilter] = React.useState({name__icontains: query.get("search")})
     const [categories, setCategories] = React.useState([])
 
     React.useEffect(() => {
@@ -43,19 +47,19 @@ const StorePage = ({category = false}) => {
 
     return (
         <Container className="p-2" fluid>
-            {category ? <Helmet>
-                <title>دسته بندی {category.name + ""} | استوک دیوایس</title>
-                {category.keywords ? <meta name="keywords" content={category.keywords} /> : null}
-                {category.description ? <meta name="description" content={category.description} /> : null}
-            </Helmet> : <Helmet>
+            <Helmet>
                 <title>فروشگاه | استوک دیوایس</title>
                 <meta name="keywords" content="فروشگاه, استوک دیوایس" />
                 <meta name="description" content="فروشگاه لپ تاپ و کامپیوتر، انواع قطعات مادربرد، کیبورد، ال سی دی، رم، هارد و .." />
-            </Helmet>}
+            </Helmet>
             <Row>
                 <Col lg={3}>
                     <div className="bg-light rounded mb-1 p-2">
                         <h1 className="h4 text-center m-0 p-2 border-bottom">فروشگاه</h1>
+                        <Form.Group className="mb-1">
+                            <Form.Label>جست و جو:</Form.Label>
+                            <Form.Control name="name__icontains" value={filter.name__icontains} onChange={handleChange} />
+                        </Form.Group>
                         <Form.Group className="mb-1">
                             <Form.Label>دسته بندی:</Form.Label>
                             <Form.Select name="category" value={filter.category} onChange={handleChange}>
@@ -63,27 +67,12 @@ const StorePage = ({category = false}) => {
                                 {categories.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
                             </Form.Select>
                         </Form.Group>
-                        <Form.Group className="mb-1">
-                            <Form.Label>بازه قیمتی:</Form.Label>
-                            <Row>
-                                <Col>
-                                    <Form.Control name="price__gte" placeholder="حداقل (تومان)" value={filter.price__gte} onChange={handleChange} />
-                                </Col>
-                                <Col>
-                                    <Form.Control name="price__lte" placeholder="حداکثر (تومان)" value={filter.price__lte} onChange={handleChange} />
-                                </Col>
-                            </Row>
-                        </Form.Group>
                         <Button className="w-100" onClick={update}>اعمال فیلتر</Button>
                     </div>
                 </Col>
                 <Col>
                     <div className="bg-light rounded mb-1 p-2">
-                        <div className="d-flex flex-wrap justify-content-center">
-                            {products && products.length > 0 ? products.map((x, i) => (
-                                <ProductCard className="col-10 col-sm-8 col-md-6 col-lg-3" key={i} product={x} />
-                            )): "کالایی جهت نمایش وجود ندارد."}
-                        </div>
+                        <Products products={products} />
                     </div>
                 </Col>
             </Row>

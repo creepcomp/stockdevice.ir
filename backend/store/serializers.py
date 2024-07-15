@@ -6,6 +6,7 @@ from account.models import User
 class ProductSerializer(ModelSerializer):
     description = CharField(read_only=True)
     category = PrimaryKeyRelatedField(queryset=Category.objects.all())
+    currency = CharField(default="IRT")
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

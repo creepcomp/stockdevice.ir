@@ -122,7 +122,7 @@ const Users = () => {
                     )) : <td colSpan="5" className="text-center p-2">جدول خالی است.</td>}
                 </tbody>
             </Table>
-            <Button className="w-100" onClick={() => {setNote({}); setShow(true)}}>اضافه کردن</Button>
+            <Button className="w-100" onClick={() => {setUser({}); setShow(true)}}>اضافه کردن</Button>
             <Modal show={show} size="lg" onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>

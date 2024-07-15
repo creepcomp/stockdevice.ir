@@ -267,7 +267,7 @@ const Products = () => {
                         </Tab>
                         <Tab title="سئو" eventKey="seo">
                             <Form.Label>توضیحات:</Form.Label>
-                            <textarea className={error.body ? "form-control is-invalid" : "form-control"} name="body" id="body" value={product.body} onChange={handleChange} />
+                            <Form.Control name="body" value={product.body} onChange={handleChange} isInvalid={error.body} as="textarea" rows="10" />
                             <Form.Control.Feedback type="invalid">{error.body}</Form.Control.Feedback>
                             <div className="row">
                                 <div className="col-sm">

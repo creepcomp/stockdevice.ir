@@ -1,6 +1,5 @@
 import React from "react"
 import { Card, Ratio, Carousel } from "react-bootstrap"
-import "./ProductCard.css"
 
 const ProductCard = ({product, className}) => {
     return (

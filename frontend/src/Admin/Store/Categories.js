@@ -108,7 +108,7 @@ const Categories = () => {
                             <td>{x.name}</td>
                             <td>{x.parent ? categories[x.parent].name : "اصلی"}</td>
                             <td className="d-print-none">
-                                <Button variant="secondary" className="m-1" href={"/store/?category=" + x.id}>
+                                <Button variant="secondary" className="m-1" href={"/store/category/" + x.id}>
                                     <i className="fa-solid fa-eye" />
                                 </Button>
                                 <Button className="m-1" variant="secondary" onClick={() => edit(x.id)}>
@@ -123,7 +123,7 @@ const Categories = () => {
                 </tbody>
             </Table>
             <Button className="w-100" onClick={() => {setCategory({}); setShow(true)}}>اضافه کردن</Button>
-            <Modal show={show} onHide={() => setShow(false)}>
+            <Modal size="lg" show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>اضافه/ویرایش کردن</Modal.Title>
                 </Modal.Header>
@@ -148,6 +148,9 @@ const Categories = () => {
                         {categories.map((x, i) => <option key={i} value={x.id}>{x.name}</option>)}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">{error.parent}</Form.Control.Feedback>
+                    <Form.Label>توضیحات:</Form.Label>
+                    <Form.Control name="description" value={category.description} as="textarea" rows="5" onChange={handleChange} isInvalid={error.description} />
+                    <Form.Control.Feedback type="invalid">{error.description}</Form.Control.Feedback>
                     <Form.Label>کلید واژه ها:</Form.Label>
                     <Form.Control name="keywords" value={category.keywords} onChange={handleChange} isInvalid={error.keywords} />
                     <Form.Control.Feedback type="invalid">{error.keywords}</Form.Control.Feedback>

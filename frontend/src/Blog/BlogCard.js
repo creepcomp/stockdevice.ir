@@ -1,6 +1,5 @@
 import React from "react"
 import {Card, Ratio} from "react-bootstrap"
-import "./BlogCard.css"
 
 const BlogCard = ({blog, className}) => {
     return (

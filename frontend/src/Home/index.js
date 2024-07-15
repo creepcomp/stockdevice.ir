@@ -14,6 +14,7 @@ const Home = () => {
                 <title>فروشگاه لپ تاپ و کامپیوتر استوک دیوایس</title>
                 <meta name="keywords" content="لپ تاپ, کامپیوتر, خرید, فروش, استوک دیوایس" />
                 <meta name="desciption" content="فروشگاه لپ تاپ و کامپیوتر استوک دیوایس، با بیش از ۳۰ سال سابقه تخصصی در زمینه واردات انواع لپ تاپ نو و استوک در ایران، وارد کننده رسمی لپ تاپ های اسنوک با قیمت مناسب در خدمت شما مشتریان گرامی هستیم." />
+                <meta name="robots" content="index, follow" />
                 <meta name="geo.region" content="IR" />
                 <meta name="geo.placename" content="Tehran" />
                 <meta name="geo.position" content="35.70362751.405120" />
